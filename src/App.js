@@ -15,13 +15,20 @@ const PORT = "8080";
 
 
     this.state = {
+      selectedEpisode : '', 
+      selectedAudio : '',
+      selectedSubtitle : '',
       
+      episodes :[],
+      subtitleTracks : [],
+      audioTracks : [],
       socket : null,
       mode : 'enter', //enter,view,browse
       service : null
     };
     this.submitOtp = this.submitOtp.bind(this);
     this.attachSocketEvents = this.attachSocketEvents.bind(this);
+    this.goToLandingPage = this.goToLandingPage.bind(this);
   }
 
   componentDidMount(){
@@ -31,6 +38,16 @@ const PORT = "8080";
     else{
       console.log("socket is null");
     }
+  }
+
+
+  goToLandingPage(){
+   this.setState({
+    socket : null,
+    mode : 'enter',
+    service : null
+   });
+
   }
 
   attachSocketEvents(){
@@ -46,6 +63,29 @@ const PORT = "8080";
           this.setState({service : 'netflix'});
         }
       });
+
+      socket.on("biwayConnectionEnded",data=>{
+        this.goToLandingPage();
+      });
+
+      socket.on("disconnect",data=>{
+        this.goToLandingPage();
+      });
+      
+      socket.on("viewModeDataSetup",data=>{
+        console.log("received view mode data setup");
+        console.log(data);
+        this.setState({
+            selectedEpisode : data.selectedEpisode, 
+            selectedAudio : data.selectedAudio,
+            selectedSubtitle : data.selectedSubtitle,
+            
+            episodes : data.episodes,
+            subtitleTracks : data.subtitleTracks,
+            audioTracks : data.audioTracksList
+          });      
+        });
+
   }
 
   submitOtp(otpValue){
@@ -68,7 +108,11 @@ const PORT = "8080";
     let service = this.state.service
     let mainBox = <OtpBox submitMethod={this.submitOtp}></OtpBox>;
     if(mode == 'view' && service == 'netflix' ){
-      mainBox =<NetflixWatch socket={this.state.socket}></NetflixWatch>
+      mainBox =<NetflixWatch socket={this.state.socket} 
+      episodes={this.state.episodes} selectedEpisode={this.state.selectedEpisode}
+      audioTracks={this.state.audioTracks} selectedAudio={this.state.selectedAudio}
+      subtitleTracks={this.state.subtitleTracks} selectedSubtitle={this.state.selectedSubtitle}
+      ></NetflixWatch>
     }
     else if(mode == 'browse' && service == 'netflix' ){
 

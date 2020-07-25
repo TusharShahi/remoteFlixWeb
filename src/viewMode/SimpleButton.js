@@ -5,8 +5,7 @@ import React from "react";
     super(props);
 
     this.state = {
-      buttonType : this.props.type,
-      socket : this.props.socket
+      buttonType : this.props.type
     };
     this.clickButton = this.clickButton.bind(this);
   }
@@ -14,23 +13,29 @@ import React from "react";
 
   clickButton(){
     console.log("callButton is called");
-    this.state.socket.emit(this.state.buttonType);
+    this.props.socket.emit(this.state.buttonType);
   } 
 
   render() {
     let buttonType = this.state.buttonType;
     let button;
     if(buttonType == 'forward'){
-     button = <span onClick={this.clickButton}>&#x23ef;</span>     
+     button = <span onClick={this.clickButton}>Forward</span>     
     }
     else if(buttonType == 'backward'){
-      button = <span onClick={this.clickButton}>&#x23f8;</span>
+      button = <span onClick={this.clickButton}>Backward</span>
     }
     else if(buttonType == 'play'){
-      button = <span onClick={this.clickButton}>&#x23e9;</span>
+      button = <span onClick={this.clickButton}>Play</span>
     }
     else if(buttonType == 'pause'){
-      button = <span onClick={this.clickButton}>&#x23ea;</span>
+      button = <span onClick={this.clickButton}>Pause</span>
+    }
+    else if(buttonType == 'nextEpisode'){
+      button = <span onClick={this.clickButton}>Next Episode</span>  
+    }
+    else if(buttonType == 'muteToggle'){
+      button = <span onClick={this.clickButton}>Mute Toggle</span>        
     }
     return (
       <div>
