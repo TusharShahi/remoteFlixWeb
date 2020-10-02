@@ -1,35 +1,50 @@
 import React from "react";
+import "./OtpBox.css";
 
-
- class OtpBox extends React.Component {
-  constructor(props){
+class OtpBox extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
-        otpValue : null
+      otpValue: null
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  
+    //this.textInput = React.createRef();
+    // this.focusTextInput = this.focusTextInput.bind(this);
   }
 
-  handleChange(event){
-    this.setState({otpValue: event.target.value});
+  handleChange(event) {
+    this.setState({ otpValue: event.target.value });
   }
+
+  focusTextInput() {
+    // Explicitly focus the text input using the raw DOM API
+    // Note: we're accessing "current" to get the DOM node
+    //   this.textInput.current.focus();
+  }
+
 
   handleSubmit(event) {
     event.preventDefault();
     this.props.submitMethod(this.state.otpValue);
-   
+
   }
 
   render() {
     return (
+
       <div>
-          <form onSubmit = {this.handleSubmit}>
-                <input type="text" pattern="[0-9]{6}"
-                        onChange={this.handleChange} />
-                <input type="submit" value="Submit"></input>
+        <h1>RemoteFlix</h1>
+        <div>
+          <form onSubmit={this.handleSubmit}>
+            <label htmlFor="inputOtp">Please Enter Passcode</label>
+            <input type="text" pattern="[0-9]{6}" id="inputOtp"
+              onChange={this.handleChange}
+            /*placeholder="Please enter passcode"*/
+            />
+            <input type="submit" value="Submit"></input>
           </form>
+        </div>
       </div>
     );
   }

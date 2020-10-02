@@ -1,0 +1,18 @@
+
+
+
+.playControlsBox , .otherControlsBox, .connectionControlsBox{
+    display: flex;
+    flex-direction: row;
+    justify-content:  center ;
+}
+
+.tracksBox{
+    display: flex;
+    flex-direction: row;
+    justify-content:  space-around ;
+}
+
+.trackBox h4{
+    margin : 2% 0%;
+}

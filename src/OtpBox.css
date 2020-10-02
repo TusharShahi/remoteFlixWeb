@@ -1,0 +1,76 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;900&display=swap');
+
+div{
+
+    text-align: center;
+    padding : 5% 2% 2% 2%;
+}
+
+div h1{
+    text-transform: uppercase;
+    font-family : 'Raleway';
+    font-weight: 900;
+}
+
+form{
+    width: 60%;
+    margin: 0 auto;
+}
+
+input{
+    display: block;
+    margin: 10% auto;
+}
+
+label{
+color : #fff;
+}
+
+
+input[type="text"]{
+    border : none;
+    border-bottom : 2px solid  #e50914;
+    background : none;
+    width: 60%;
+    color : #fff;
+}
+
+
+
+
+input[type="text"]:focus{
+    background : #353B45;
+    border : none;
+    border-bottom : 2px solid  #e50914;
+
+}
+
+
+
+input[type="submit"]{
+    padding: 5%;
+    background :  #e50914;
+    border : none;
+    width: 60%;
+    color : #fff;
+    text-transform: uppercase;
+    font-weight: 900;
+}
+
+
+input[type="submit"]:focus{
+    background :  #8c0c13;
+}
+
+
+
+
+h1{
+    font-family : 'Poppins';
+    color :  #e50914;
+}
+
+@font-face {
+    font-family: 'MyFont';
+  }

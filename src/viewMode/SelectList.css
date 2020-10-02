@@ -1,0 +1,20 @@
+
+
+.SelectList{
+    padding: 2%;
+}
+
+h4{
+    margin : 2%;
+    color: #fff;
+
+}
+
+select{
+
+    border : none;
+    background : #5b5b5b;
+    color : #fff;
+    border-radius: 5%;
+    margin : 0%;
+}
