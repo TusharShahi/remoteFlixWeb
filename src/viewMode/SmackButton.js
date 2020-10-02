@@ -4,7 +4,7 @@ import "./SmackButton.css";
 class SmackButton extends React.Component {
     constructor(props) {
         super(props);
-
+        console.log('fake commit');
         this.state = {
             buttonType: this.props.type
         };
