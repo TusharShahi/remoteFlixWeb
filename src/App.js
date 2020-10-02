@@ -124,7 +124,8 @@ class App extends React.Component {
 
   submitOtp(otpValue) {
     //console.og(otpValue);
-    let newSocket = socketIOClient(ENDPOINT + ":" + PORT + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    //   let newSocket = socketIOClient(ENDPOINT + ":" + PORT + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    let newSocket = socketIOClient(ENDPOINT + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
     newSocket.on("connect", data => {
       //console.og("connection has been made");
       this.setState({ socket: newSocket }, function () {
