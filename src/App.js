@@ -5,7 +5,7 @@ import NetflixWatch from "./viewMode/NetflixWatch";
 import NetflixPremier from "./viewMode/NetflixPremier";
 
 
-const ENDPOINT = "http://192.168.0.11";
+const ENDPOINT = process.env.SERVER_URL;
 
 const PORT = "8080";
 
