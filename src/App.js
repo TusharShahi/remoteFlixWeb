@@ -5,7 +5,7 @@ import NetflixWatch from "./viewMode/NetflixWatch";
 import NetflixPremier from "./viewMode/NetflixPremier";
 
 
-const ENDPOINT = process.env.SERVER_URL;
+const ENDPOINT = process.env.REACT_APP_SERVER_URL;
 
 const PORT = "8080";
 
