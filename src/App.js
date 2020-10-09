@@ -5,7 +5,7 @@ import NetflixWatch from "./viewMode/NetflixWatch";
 import NetflixPremier from "./viewMode/NetflixPremier";
 
 
-const ENDPOINT = process.env.REACT_APP_SERVER_URL;
+//const ENDPOINT = process.env.REACT_APP_SERVER_URL;
 
 const PORT = "8080";
 
@@ -106,8 +106,8 @@ class App extends React.Component {
     });
 
     socket.on("viewModeDataSetup", data => {
-      //console.og("received view mode data setup");
-      //console.og(data);
+      console.log("received view mode data setup");
+      console.log(data);
       this.setState({
         selectedEpisode: data.episodes.selected,
         selectedAudio: data.selectedAudio,
@@ -125,7 +125,7 @@ class App extends React.Component {
   submitOtp(otpValue) {
     //console.og(otpValue);
     //   let newSocket = socketIOClient(ENDPOINT + ":" + PORT + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
-    let newSocket = socketIOClient(ENDPOINT + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
     newSocket.on("connect", data => {
       //console.og("connection has been made");
       this.setState({ socket: newSocket }, function () {
