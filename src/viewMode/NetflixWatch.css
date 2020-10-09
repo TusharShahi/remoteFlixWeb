@@ -16,3 +16,10 @@
 .trackBox h4{
     margin : 2% 0%;
 }
+
+
+.volumeControlsBox{
+
+    display: flex;
+    justify-content: center;
+}

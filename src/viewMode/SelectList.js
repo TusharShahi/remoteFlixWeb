@@ -16,10 +16,12 @@ class SelectList extends React.Component {
 
   getList() {
     let items = [];
+    console.log('selected value is ' + this.props.selectedValue);
 
     if (this.props.inputs != null) {
       for (let i = 0; i < this.props.inputs.length; i++) {
-        if (this.state.value == this.props.inputs[i]) {
+        if (this.props.selectedValue == this.props.inputs[i]) {
+          console.log('it is true for ' + i);
           items.push(<option key={this.props.inputs[i]} value={this.props.inputs[i]} selected>{this.props.inputs[i]}</option>);
         }
         else {
