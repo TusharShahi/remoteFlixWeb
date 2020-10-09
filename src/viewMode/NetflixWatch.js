@@ -65,9 +65,9 @@ class NetflixWatch extends React.Component {
 
             <SimpleButton type='nextEpisode' socket={this.props.socket}></SimpleButton>
 
-            <SimpleButton type='fullScreenToggle' socket={this.props.socket}></SimpleButton>
+            {/* <SimpleButton type='fullScreenToggle' socket={this.props.socket}></SimpleButton>
 
-
+    */}
             {skipIntroButton}
           </div>
         </div>

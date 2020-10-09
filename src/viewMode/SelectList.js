@@ -19,7 +19,13 @@ class SelectList extends React.Component {
 
     if (this.props.inputs != null) {
       for (let i = 0; i < this.props.inputs.length; i++) {
-        items.push(<option key={this.props.inputs[i]} value={this.props.inputs[i]}>{this.props.inputs[i]}</option>);
+        if (this.state.value == this.props.inputs[i]) {
+          items.push(<option key={this.props.inputs[i]} value={this.props.inputs[i]} selected>{this.props.inputs[i]}</option>);
+        }
+        else {
+          items.push(<option key={this.props.inputs[i]} value={this.props.inputs[i]}>{this.props.inputs[i]}</option>);
+
+        }
       }
     }
     return items;
@@ -69,7 +75,7 @@ class SelectList extends React.Component {
     return (
       <div className='SelectList'>
         <h4>{listType}</h4>
-        <select value={this.state.value} onChange={this.handleChange} className={this.props.name}>
+        <select onChange={this.handleChange} className={this.props.name}>
           {this.getList()}
         </select>
       </div>
