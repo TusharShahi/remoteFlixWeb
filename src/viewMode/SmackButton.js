@@ -19,8 +19,8 @@ class SmackButton extends React.Component {
     render() {
         return (
             <div className='smackButton'>
-                <span>Smack</span>
-            </div>
+                <span onClick={this.clickButton}>Smack</span>
+            </div >
         );
     }
 }

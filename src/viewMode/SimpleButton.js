@@ -48,7 +48,7 @@ class SimpleButton extends React.Component {
       button = <span onClick={this.clickButton}>Full Screen Toggle</span>
     }
     else if (buttonType == 'skipIntro') {
-      button = <span onClick={this.clickButton}>Skip Intro</span>
+      button = <span onClick={this.clickButton}>Skip Intro/Recap</span>
     }
     else if (buttonType == 'volumeUp') {
       button = <span onClick={this.clickButton}>Vol. Up</span>
