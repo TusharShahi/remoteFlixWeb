@@ -11,9 +11,12 @@ const PORT = "8080";
 
 
 class App extends React.Component {
+
+
+
   constructor(props) {
     super(props);
-
+    //console.log('constructor is called');
 
     this.state = {
       selectedEpisode: '',
@@ -25,11 +28,14 @@ class App extends React.Component {
       audioTracks: [],
       socket: null,
       mode: 'enter', //enter,view,browse,premier
-      service: null
+      service: null,
+      selectedEpisodeIndex: -1
     };
+
     this.submitOtp = this.submitOtp.bind(this);
     this.attachSocketEvents = this.attachSocketEvents.bind(this);
     this.goToLandingPage = this.goToLandingPage.bind(this);
+    this.nextEpisode = this.nextEpisode.bind(this);
   }
 
   componentDidMount() {
@@ -85,7 +91,7 @@ class App extends React.Component {
 
 
     socket.on("modeChange", data => {
-      //console.og('modeChange');
+      //console.log('modeChange');
       //console.og(data);
       if (data.mode == 'netflixView') {
         //console.og('setting mode to netflixView');
@@ -109,23 +115,44 @@ class App extends React.Component {
       console.log("received view mode data setup");
       console.log(data);
       this.setState({
+        selectedEpisodeIndex: data.episodes.list.indexOf(data.episodes.selected),
         selectedEpisode: data.episodes.selected,
         selectedAudio: data.selectedAudio,
         selectedSubtitle: data.selectedSubtitle,
 
         episodes: data.episodes.list,
         subtitleTracks: data.subtitleTracks,
-        audioTracks: data.audioTracksList
+        audioTracks: data.audioTracksList,
+
       });
+      /*if (data.episodes.list != null) {
+        let index = data.episodes.list.indexOf(data.episodes.selected);
+        this.setState({
+          selectedEpisodeIndex: 4
+        });
+      }*/
+
+
     });
 
+
+
+
+
+  }
+
+  nextEpisode() {
+    //console.log('xxxx');
+    this.setState({
+      selectedEpisodeIndex: this.state.selectedEpisodeIndex + 1
+    });
 
   }
 
   submitOtp(otpValue) {
     //console.og(otpValue);
-    //   let newSocket = socketIOClient(ENDPOINT + ":" + PORT + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
-    let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    let newSocket = socketIOClient("http://192.168.0.11:8080?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    //let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
     newSocket.on("connect", data => {
       //console.og("connection has been made");
       this.setState({ socket: newSocket }, function () {
@@ -146,9 +173,10 @@ class App extends React.Component {
     let mainBox = <OtpBox submitMethod={this.submitOtp}></OtpBox>;
     if (mode == 'view' && service == 'netflix') {
       mainBox = <NetflixWatch socket={this.state.socket}
-        episodesList={this.state.episodes} selectedEpisode={this.state.selectedEpisode}
+        episodesList={this.state.episodes} selectedEpisode={this.state.selectedEpisode} selectedEpisodeIndex={this.state.selectedEpisodeIndex}
         audioTracks={this.state.audioTracks} selectedAudio={this.state.selectedAudio}
         subtitleTracks={this.state.subtitleTracks} selectedSubtitle={this.state.selectedSubtitle}
+        onNextEpisode={this.nextEpisode}
       ></NetflixWatch>
     }
     else if (mode == 'browse' && service == 'netflix') {

@@ -14,10 +14,14 @@ class SimpleButton extends React.Component {
 
   clickButton() {
     //console.og("callButton is called");
+
     if (this.state.buttonType == 'close')
       this.props.socket.disconnect();
     else
       this.props.socket.emit(this.state.buttonType);
+    if (this.state.buttonType == 'nextEpisode')
+      this.props.onNextEpisode();
+
   }
 
   render() {
@@ -40,6 +44,8 @@ class SimpleButton extends React.Component {
     }
     else if (buttonType == 'nextEpisode') {
       button = <span onClick={this.clickButton}>Next Episode</span>
+
+      //document.getElementById('episodes').getElementsByTagName('option').selected = 'selected'
     }
     else if (buttonType == 'muteToggle') {
       button = <span onClick={this.clickButton}>Mute Toggle</span>
