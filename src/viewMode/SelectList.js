@@ -55,6 +55,7 @@ class SelectList extends React.Component {
     if (emitEvent != '') {
       //console.og('there has been a change');
       this.props.socket.emit(emitEvent, selectedData);
+      this.props.onChangeSelection(event.target.value, this.props.name);
       this.setState({ value: event.target.value });
     }
   }

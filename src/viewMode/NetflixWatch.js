@@ -13,14 +13,48 @@ class NetflixWatch extends React.Component {
     //console.log(this.props.selectedEpisodeIndex);
     //console.log(this.props.episodesList);
 
+    let initialSelectedEpisode = '';
+    if (this.props.episodesList != null && this.props.episodesList.length > 0 && this.props.selectedEpisodeIndex != null) {
+
+      initialSelectedEpisode = this.props.episodesList[this.props.selectedEpisodeIndex];
+    }
+
+    let initialSelectedAudio = this.props.selectedAudio;
+    let initialSelectedSub = this.props.selectedSubtitle;
+
+
+
+
     this.state = {
+      selectedEpisode: initialSelectedEpisode,
+      selectedAudio: initialSelectedAudio,
+      selectedSub: initialSelectedSub,
+
     };
 
 
     this.nextEpisode = this.nextEpisode.bind(this);
-
+    this.changeSelection = this.changeSelection.bind(this);
   }
 
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedAudio !== this.props.selectedAudio) {
+      this.setState({
+        selectedAudio: this.props.selectedAudio
+      });
+    }
+    if (prevProps.selectedSubtitle !== this.props.selectedSubtitle) {
+      this.setState({
+        selectedSubtitle: this.props.selectedSubtitle
+      });
+    }
+    if (prevProps.selectedEpisode !== this.props.selectedEpisode) {
+      this.setState({
+        selectedEpisode: this.props.selectedEpisode
+      });
+    }
+  }
 
   nextEpisode() {
     //console.log('nextEpisode clcikec');
@@ -32,20 +66,41 @@ class NetflixWatch extends React.Component {
     }
   }
 
+  changeSelection(trackValue, trackType) {
+    if (trackType == 'audio') {
+      this.setState({
+        selectedAudio: trackValue
+      });
+    }
+    else if (trackType == 'subs') {
+      this.setState({
+        selectedSubtitle: trackValue
+      });
+    }
+    else if (trackType == 'episodes') {
+      this.setState({
+        selectedEpisode: trackValue
+      });
+    }
+
+
+  }
+
   render() {
     //console.log('rendered netflixwatch');
     //console.log(this.props.selectedEpisodeIndex);
+    console.log(this.state.selectedEpisode);
 
-    let selectedEpisode;
-    if (this.props.episodesList != null && this.props.episodesList.length > 0 && this.props.selectedEpisodeIndex != null) {
+    console.log(this.state.selectedSubtitle);
+    console.log(this.state.selectedAudio);
 
-      selectedEpisode = this.props.episodesList[this.props.selectedEpisodeIndex];
-    }
     //this.setState({ selectedEpisodeIndex: this.props.selectedEpisodeIndex });
     let episodeSelectComponent = <div></div>;
     if (this.props.selectedEpisode != null) {
       episodeSelectComponent = <div id='episodesBox' className="trackBox">
-        <SelectList socket={this.props.socket} inputs={this.props.episodesList} name='episodes' selectedValue={selectedEpisode}
+        <SelectList socket={this.props.socket} inputs={this.props.episodesList} name='episodes' selectedValue={this.state.selectedEpisode}
+          onChangeSelection={this.changeSelection}
+
         ></SelectList></div>;
     }
     let skipIntroButton = <SimpleButton type='skipIntro' socket={this.props.socket}></SimpleButton>
@@ -59,12 +114,13 @@ class NetflixWatch extends React.Component {
 
         <div className='tracksBox'>
           <div className='subsTracksBox trackBox'>
-            <SelectList socket={this.props.socket} inputs={this.props.subtitleTracks} name='subs' selectedValue={this.props.selectedSubtitle}
+            <SelectList socket={this.props.socket} inputs={this.props.subtitleTracks} name='subs' selectedValue={this.state.selectedSubtitle}
+              onChangeSelection={this.changeSelection}
             ></SelectList>
           </div>
 
           <div className='audioTracksBox trackBox'>
-            <SelectList socket={this.props.socket} inputs={this.props.audioTracks} name='audio' selectedValue={this.props.selectedAudio}></SelectList>
+            <SelectList socket={this.props.socket} inputs={this.props.audioTracks} name='audio' selectedValue={this.state.selectedAudio}></SelectList>
           </div>
 
         </div>

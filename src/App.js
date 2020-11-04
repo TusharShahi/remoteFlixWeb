@@ -114,8 +114,12 @@ class App extends React.Component {
     socket.on("viewModeDataSetup", data => {
       console.log("received view mode data setup");
       console.log(data);
+      let episodeIndex = -1;
+      if (data.episodes.list != null && data.episodes.list.length > 0) {
+        episodeIndex = data.episodes.list.indexOf(data.episodes.selected);
+      }
       this.setState({
-        selectedEpisodeIndex: data.episodes.list.indexOf(data.episodes.selected),
+        selectedEpisodeIndex: episodeIndex,
         selectedEpisode: data.episodes.selected,
         selectedAudio: data.selectedAudio,
         selectedSubtitle: data.selectedSubtitle,
