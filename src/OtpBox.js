@@ -38,7 +38,7 @@ class OtpBox extends React.Component {
         <h1>RemoteFlix</h1>
         <div>
           <form onSubmit={this.handleSubmit}>
-            <label htmlFor="inputOtp">Please Enter Passcode</label>
+            <label htmlFor="inputOtp">Please Enter OTP</label>
             <input type="text" pattern="[0-9]{6}" id="inputOtp"
               onChange={this.handleChange}
               /*placeholder="Please enter passcode"*/
