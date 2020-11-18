@@ -4,6 +4,7 @@ import OtpBox from "./OtpBox"
 import NetflixWatch from "./viewMode/NetflixWatch";
 import NetflixPremier from "./viewMode/NetflixPremier";
 
+import "./App.css";
 
 //const ENDPOINT = process.env.REACT_APP_SERVER_URL;
 
@@ -29,8 +30,10 @@ class App extends React.Component {
       socket: null,
       mode: 'enter', //enter,view,browse,premier
       service: null,
-      selectedEpisodeIndex: -1
+      selectedEpisodeIndex: -1,
+      recentOTPs: []
     };
+
 
     this.submitOtp = this.submitOtp.bind(this);
     this.attachSocketEvents = this.attachSocketEvents.bind(this);
@@ -39,6 +42,25 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    let recentOTPsMapString = localStorage.getItem('recentOTPsMap');
+    let recentOTPsMap = new Map();
+    let recentOTPsList = [];
+    if (recentOTPsMapString != null) {
+      recentOTPsMap = JSON.parse(recentOTPsMapString);
+      console.log(recentOTPsMap);
+      console.log(typeof (recentOTPsMap));
+      for (let key of Object.keys(recentOTPsMap)) {
+        if (Date.now() - recentOTPsMap[key] < 51840000) {
+          recentOTPsList.push(key);
+        }
+      }
+
+    }
+
+    this.setState({
+      recentOTPs: recentOTPsList
+    });
+
     if (this.state.socket != null) {
       this.attachSocketEvents();
     }
@@ -48,10 +70,27 @@ class App extends React.Component {
 
 
   goToLandingPage() {
+    console.log('go to landing page');
+    let recentOTPsMapString = localStorage.getItem('recentOTPsMap');
+    let recentOTPsMap = new Map();
+    let recentOTPsList = [];
+    if (recentOTPsMapString != null) {
+      recentOTPsMap = JSON.parse(recentOTPsMapString);
+      console.log(recentOTPsMap);
+      console.log(typeof (recentOTPsMap));
+      for (let key of Object.keys(recentOTPsMap)) {
+        if (Date.now() - recentOTPsMap[key] < 51840000) {
+          recentOTPsList.push(key);
+        }
+      }
+
+    }
+
     this.setState({
       socket: null,
       mode: 'enter',
-      service: null
+      service: null,
+      recentOTPs: recentOTPsList
     });
 
   }
@@ -154,11 +193,30 @@ class App extends React.Component {
   }
 
   submitOtp(otpValue) {
-    //console.og(otpValue);
+    console.log(otpValue);
     //let newSocket = socketIOClient("http://192.168.0.11:8080?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
     let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+
+
     newSocket.on("connect", data => {
       //console.og("connection has been made");
+
+      //let recentOTP = 'OTP-' + Date.now();
+      let recentOTPsMapString = localStorage.getItem('recentOTPsMap');
+
+      console.log(recentOTPsMapString);
+      let recentOTPsMap = new Map();
+      if (recentOTPsMapString != null) {
+        recentOTPsMap = JSON.parse(recentOTPsMapString);
+        console.log(recentOTPsMap);
+        console.log(typeof (recentOTPsMap));
+      }
+
+      recentOTPsMap[otpValue] = Date.now();
+      localStorage.setItem('recentOTPsMap', JSON.stringify(recentOTPsMap));
+
+
+      //localStorage.setItem('', keyName);
       this.setState({ socket: newSocket }, function () {
         //console.og("setting");
         this.attachSocketEvents();
@@ -174,7 +232,19 @@ class App extends React.Component {
     let service = this.state.service;
     //console.og(mode);
     //console.og(service);
-    let mainBox = <OtpBox submitMethod={this.submitOtp}></OtpBox>;
+    let recentOTPButtons = this.state.recentOTPs.map((x) => <span class="recentOTPButton" onClick={() => this.submitOtp(x)} >{x}</span>);
+    let recentOTPsHeading = "";
+
+    if (this.state.recentOTPs.length > 0) {
+      recentOTPsHeading = "Recent OTPs :"
+    }
+    let recentOTPBox = <div className="recentOTPBox"><h3>{recentOTPsHeading}</h3>{recentOTPButtons}</div>
+
+    let mainBox = <div><OtpBox submitMethod={this.submitOtp}></OtpBox>
+      {recentOTPBox}
+    </div>;
+
+
     if (mode == 'view' && service == 'netflix') {
       mainBox = <NetflixWatch socket={this.state.socket}
         episodesList={this.state.episodes} selectedEpisode={this.state.selectedEpisode} selectedEpisodeIndex={this.state.selectedEpisodeIndex}

@@ -25,6 +25,7 @@ class OtpBox extends React.Component {
 
 
   handleSubmit(event) {
+    console.log('on submit clicked');
     event.preventDefault();
     this.props.submitMethod(this.state.otpValue);
 
@@ -40,7 +41,8 @@ class OtpBox extends React.Component {
             <label htmlFor="inputOtp">Please Enter Passcode</label>
             <input type="text" pattern="[0-9]{6}" id="inputOtp"
               onChange={this.handleChange}
-            /*placeholder="Please enter passcode"*/
+              /*placeholder="Please enter passcode"*/
+              autoComplete="off"
             />
             <input type="submit" value="Submit"></input>
           </form>

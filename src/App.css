@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+
+.recentOTPBox h3{
+  color: #fff;
+}
+.recentOTPButton {
+  margin: 5px auto;
+  width: 18%;
+  padding: 4px; 
+  color : #fff;
+  background :  #e50914;
+  display: block;
+  font-size: 90%;
+  font-weight: 600;
+}
+.recentOTPButton:hover{
+  background: #8a0e14;
+}
