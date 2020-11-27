@@ -35,7 +35,7 @@ class OtpBox extends React.Component {
     return (
 
       <div>
-        <h1>RemoteFlix</h1>
+        <h1>FlixRemote</h1>
         <div>
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="inputOtp">Please Enter OTP</label>

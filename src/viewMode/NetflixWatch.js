@@ -108,7 +108,60 @@ class NetflixWatch extends React.Component {
 
     return (
       <div>
-        <h1>Netflix View Mode</h1>
+
+
+
+        <div className="topControlsBox">
+
+          <SimpleButton type='muteToggle' socket={this.props.socket}></SimpleButton>
+          <SimpleButton type='close' socket={this.props.socket}></SimpleButton>
+          <SmackButton socket={this.props.socket} type="smackTV"></SmackButton>
+
+        </div>
+
+
+        <div>
+
+          <div className="playControlsBox">
+            <div className="volumeControlsBox">
+              <SimpleButton type='volumeUp' socket={this.props.socket}></SimpleButton>
+              <span>Vol.</span>
+              <SimpleButton type='volumeDown' socket={this.props.socket}></SimpleButton>
+            </div>
+            <div className="playPauseControlsBox">
+              <SimpleButton type='play' socket={this.props.socket}></SimpleButton>
+            </div>
+            {/*<SimpleButton type='pause' socket={this.props.socket}></SimpleButton>
+            */}
+            <div className="pointControlsBox">
+              <SimpleButton type='forward' socket={this.props.socket}></SimpleButton>
+              <SimpleButton type='backward' socket={this.props.socket}></SimpleButton>
+            </div>
+          </div>
+          {/* <div className='volumeControlsBox'>
+          </div> */}
+          <div className="otherControlsBox">
+
+            <SimpleButton type='nextEpisode' socket={this.props.socket} onNextEpisode={this.nextEpisode}></SimpleButton>
+
+
+
+            {/* <SimpleButton type='fullScreenToggle' socket={this.props.socket}></SimpleButton>
+      */}
+
+            {skipIntroButton}
+          </div>
+        </div>
+
+        <div id='connectionControlsBox'>
+
+
+          {/*   <SmackButton socket={this.props.socket} type="smackRemote"></SmackButton>
+    */}
+
+        </div>
+
+
 
         {episodeSelectComponent}
 
@@ -125,39 +178,7 @@ class NetflixWatch extends React.Component {
 
         </div>
 
-        <div>
-
-          <div className="playControlsBox">
-            <SimpleButton type='play' socket={this.props.socket}></SimpleButton>
-            <SimpleButton type='pause' socket={this.props.socket}></SimpleButton>
-            <SimpleButton type='forward' socket={this.props.socket}></SimpleButton>
-            <SimpleButton type='backward' socket={this.props.socket}></SimpleButton>
-          </div>
-          <div className='volumeControlsBox'>
-            <SimpleButton type='volumeUp' socket={this.props.socket}></SimpleButton>
-            <SimpleButton type='volumeDown' socket={this.props.socket}></SimpleButton>
-            <SimpleButton type='muteToggle' socket={this.props.socket}></SimpleButton>
-          </div>
-          <div className="otherControlsBox">
-
-            <SimpleButton type='nextEpisode' socket={this.props.socket} onNextEpisode={this.nextEpisode}></SimpleButton>
-
-
-
-            {/* <SimpleButton type='fullScreenToggle' socket={this.props.socket}></SimpleButton>
-    */}
-
-            {skipIntroButton}
-          </div>
-        </div>
-
-        <div id='connectionControlsBox'>
-          <SimpleButton type='close' socket={this.props.socket}></SimpleButton>
-          <SmackButton socket={this.props.socket} type="smackTV"></SmackButton>
-          <SmackButton socket={this.props.socket} type="smackRemote"></SmackButton>
-
-        </div>
-
+        <h1>Netflix View Mode</h1>
       </div>
     );
   }

@@ -21,7 +21,7 @@ class SmackButton extends React.Component {
             buttonText = 'Smack Remote';
         }
         else if (this.props.type == 'smackTV') {
-            buttonText = 'Smack TV';
+            buttonText = <i class="fas fa-redo"></i>;
         }
 
         return (

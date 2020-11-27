@@ -31,7 +31,10 @@ class App extends React.Component {
       mode: 'enter', //enter,view,browse,premier
       service: null,
       selectedEpisodeIndex: -1,
-      recentOTPs: []
+      recentOTPs: [],
+
+
+      heartBeat: null
     };
 
 
@@ -39,6 +42,13 @@ class App extends React.Component {
     this.attachSocketEvents = this.attachSocketEvents.bind(this);
     this.goToLandingPage = this.goToLandingPage.bind(this);
     this.nextEpisode = this.nextEpisode.bind(this);
+    this.heartBeatFunction = this.heartBeatFunction.bind(this);
+  }
+
+  heartBeatFunction() {
+    if (this.state.socket != null)
+      this.state.socket.emit("hearBeat");
+
   }
 
   componentDidMount() {
@@ -178,6 +188,9 @@ class App extends React.Component {
 
     });
 
+    socket.on("heartBeatReceived", data => {
+
+    });
 
 
 
@@ -220,6 +233,10 @@ class App extends React.Component {
       this.setState({ socket: newSocket }, function () {
         //console.og("setting");
         this.attachSocketEvents();
+
+        let newHeartBeat = setInterval(this.heartBeatFunction, 3000);
+
+
       });
 
       //console.og('connection from phone has been made');

@@ -1,5 +1,8 @@
 
 
+h1{ 
+font-size: 100%;
+}
 
 .playControlsBox , .otherControlsBox, .connectionControlsBox{
     display: flex;
@@ -27,4 +30,50 @@
 .connectionControlsBox{
     display: flex;
     justify-content: center;
+}
+.topControlsBox { 
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: 0 auto;
+    border : 2px solid #222;
+    border-radius : 150px;
+    width: 150px;
+    background: #222;
+}
+
+.volumeControlsBox , .pointControlsBox{  
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 180px;
+    padding: 5% 10px;
+    border: 2px solid #222;
+    background: #222;
+    border-radius: 150px;
+
+}
+
+.otherControlsBox{  
+    width: 200px;
+    margin: 0 auto;
+margin-top: 80px;
+justify-content: space-around;
+
+
+}
+
+
+.volumeControlsBox{
+    position: absolute;
+    left: 50px;
+
+}
+.pointControlsBox { 
+    position: absolute;
+    right: 50px;
+
 }
