@@ -32,6 +32,7 @@ class App extends React.Component {
       service: null,
       selectedEpisodeIndex: -1,
       recentOTPs: [],
+      playbackSpeed: 1,
 
 
       heartBeat: null
@@ -47,7 +48,7 @@ class App extends React.Component {
 
   heartBeatFunction() {
     if (this.state.socket != null)
-      this.state.socket.emit("hearBeat");
+      this.state.socket.emit("heartBeatFromClient");
 
   }
 
@@ -60,9 +61,10 @@ class App extends React.Component {
       console.log(recentOTPsMap);
       console.log(typeof (recentOTPsMap));
       for (let key of Object.keys(recentOTPsMap)) {
-        if (Date.now() - recentOTPsMap[key] < 51840000) {
-          recentOTPsList.push(key);
-        }
+        if (key != null)
+          if (Date.now() - recentOTPsMap[key] < 51840000) {
+            recentOTPsList.push(key);
+          }
       }
 
     }
@@ -89,8 +91,11 @@ class App extends React.Component {
       console.log(recentOTPsMap);
       console.log(typeof (recentOTPsMap));
       for (let key of Object.keys(recentOTPsMap)) {
-        if (Date.now() - recentOTPsMap[key] < 51840000) {
-          recentOTPsList.push(key);
+        if (key != null) {
+          if (Date.now() - recentOTPsMap[key] < 51840000) {
+            recentOTPsList.push(key);
+          }
+
         }
       }
 
@@ -188,11 +193,19 @@ class App extends React.Component {
 
     });
 
-    socket.on("heartBeatReceived", data => {
+    socket.on("heartBeatFromServer", data => {
 
     });
 
+    socket.on("changePlaybackSpeed", data => {
+      console.log("play back speed has changed ");
+      console.log(data);
+      if (data !== this.state.playbackSpeed)
+        this.setState({
+          playbackSpeed: data
+        });
 
+    });
 
 
   }
@@ -249,7 +262,7 @@ class App extends React.Component {
     let service = this.state.service;
     //console.og(mode);
     //console.og(service);
-    let recentOTPButtons = this.state.recentOTPs.map((x) => <span class="recentOTPButton" onClick={() => this.submitOtp(x)} >{x}</span>);
+    let recentOTPButtons = this.state.recentOTPs.map((x) => <span className="recentOTPButton" onClick={() => this.submitOtp(x)} >{x}</span>);
     let recentOTPsHeading = "";
 
     if (this.state.recentOTPs.length > 0) {
@@ -267,6 +280,7 @@ class App extends React.Component {
         episodesList={this.state.episodes} selectedEpisode={this.state.selectedEpisode} selectedEpisodeIndex={this.state.selectedEpisodeIndex}
         audioTracks={this.state.audioTracks} selectedAudio={this.state.selectedAudio}
         subtitleTracks={this.state.subtitleTracks} selectedSubtitle={this.state.selectedSubtitle}
+        playbackSpeed={this.state.playbackSpeed}
         onNextEpisode={this.nextEpisode}
       ></NetflixWatch>
     }

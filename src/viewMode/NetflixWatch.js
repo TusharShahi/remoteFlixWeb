@@ -29,12 +29,14 @@ class NetflixWatch extends React.Component {
       selectedEpisode: initialSelectedEpisode,
       selectedAudio: initialSelectedAudio,
       selectedSub: initialSelectedSub,
+      playbackSpeed: this.props.playbackSpeed
 
     };
 
 
     this.nextEpisode = this.nextEpisode.bind(this);
     this.changeSelection = this.changeSelection.bind(this);
+    this.changeSpeed = this.changeSpeed.bind(this);
   }
 
 
@@ -50,6 +52,11 @@ class NetflixWatch extends React.Component {
       });
     }
     if (prevProps.selectedEpisode !== this.props.selectedEpisode) {
+      this.setState({
+        selectedEpisode: this.props.selectedEpisode
+      });
+    }
+    if (prevProps.playbackSpeed !== this.props.playbackSpeed) {
       this.setState({
         selectedEpisode: this.props.selectedEpisode
       });
@@ -86,6 +93,13 @@ class NetflixWatch extends React.Component {
 
   }
 
+  changeSpeed(event) {
+    console.log(event);
+    console.log("change speed");
+    console.log(event.target.value);
+    this.props.socket.emit("changePlaybackSpeed", event.target.value);
+  }
+
   render() {
     //console.log('rendered netflixwatch');
     //console.log(this.props.selectedEpisodeIndex);
@@ -93,7 +107,8 @@ class NetflixWatch extends React.Component {
 
     console.log(this.state.selectedSubtitle);
     console.log(this.state.selectedAudio);
-
+    let playbackSpeedRate = this.props.playbackSpeed;
+    console.log(playbackSpeedRate);
     //this.setState({ selectedEpisodeIndex: this.props.selectedEpisodeIndex });
     let episodeSelectComponent = <div></div>;
     if (this.props.selectedEpisode != null) {
@@ -107,7 +122,7 @@ class NetflixWatch extends React.Component {
 
 
     return (
-      <div>
+      <div className="mainRemoteBox">
 
 
 
@@ -153,6 +168,14 @@ class NetflixWatch extends React.Component {
           </div>
         </div>
 
+        <div id="playbackSpeedBox">
+          <div class="container">
+            <div class="slider">
+              <input type="range" min="0.25" max="2" step="0.25" value={playbackSpeedRate} onInput={this.changeSpeed} />
+              <span className="outputRange">Speed: {playbackSpeedRate}</span>
+            </div>
+          </div>
+        </div>
         <div id='connectionControlsBox'>
 
 
