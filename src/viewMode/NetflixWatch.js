@@ -168,14 +168,14 @@ class NetflixWatch extends React.Component {
           </div>
         </div>
 
-        <div id="playbackSpeedBox">
+        {/*  <div id="playbackSpeedBox">
           <div class="container">
             <div class="slider">
               <input type="range" min="0.25" max="2" step="0.25" value={playbackSpeedRate} onInput={this.changeSpeed} />
               <span className="outputRange">Speed: {playbackSpeedRate}</span>
             </div>
           </div>
-        </div>
+    </div> */}
         <div id='connectionControlsBox'>
 
 
