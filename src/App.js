@@ -248,8 +248,8 @@ class App extends React.Component {
     console.log(otpValue);
 
     this.setState({ lastUsedOtp: otpValue });
-    let newSocket = socketIOClient("http://192.168.0.11:8080?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
-    //let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    //let newSocket = socketIOClient("http://192.168.0.11:8080?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
 
 
     newSocket.on("connect", data => {
