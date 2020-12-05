@@ -58,8 +58,16 @@ class NetflixWatch extends React.Component {
     }
     if (prevProps.playbackSpeed !== this.props.playbackSpeed) {
       this.setState({
-        selectedEpisode: this.props.selectedEpisode
+        playbackSpeed: this.props.playbackSpeed
       });
+    }
+    if (prevProps.selectedEpisodeIndex !== this.props.selectedEpisodeIndex) {
+      console.log("change in selcted episode index " + this.props.selectedEpisodeIndex);
+      this.setState({
+        selectedEpisode: this.props.episodesList[this.props.selectedEpisodeIndex]
+      });
+
+
     }
   }
 
@@ -171,7 +179,7 @@ class NetflixWatch extends React.Component {
         <div id="playbackSpeedBox">
           <div class="container">
             <div class="slider">
-              <input type="range" min="0.25" max="2" step="0.25" value={playbackSpeedRate} onInput={this.changeSpeed} />
+              <input type="range" min="0.5" max="2" step="0.25" value={playbackSpeedRate} onInput={this.changeSpeed} />
               <span className="outputRange">Speed: {playbackSpeedRate}</span>
             </div>
           </div>

@@ -33,9 +33,10 @@ class App extends React.Component {
       selectedEpisodeIndex: -1,
       recentOTPs: [],
       playbackSpeed: 1,
-
-
-      heartBeat: null
+      showHelp: false,
+      dislpayConnectionError: false,
+      heartBeat: null,
+      lastUsedOtp: null
     };
 
 
@@ -44,6 +45,10 @@ class App extends React.Component {
     this.goToLandingPage = this.goToLandingPage.bind(this);
     this.nextEpisode = this.nextEpisode.bind(this);
     this.heartBeatFunction = this.heartBeatFunction.bind(this);
+    this.toggleHelp = this.toggleHelp.bind(this);
+    this.showConnectionError = this.showConnectionError.bind(this);
+    this.forceLoginfunction = this.forceLoginfunction.bind(this);
+    this.clearAlertFunction = this.clearAlertFunction.bind(this);
   }
 
   heartBeatFunction() {
@@ -110,6 +115,16 @@ class App extends React.Component {
 
   }
 
+  showConnectionError(errorText) {
+    console.log(errorText);
+    this.setState({
+      dislpayConnectionError: errorText
+    });
+
+
+  }
+
+
   attachSocketEvents() {
     let socket = this.state.socket;
     socket.on("biwayConnection", data => {
@@ -143,6 +158,17 @@ class App extends React.Component {
 
     });
 
+    socket.on("cantJoin", data => {
+      this.showConnectionError("One phone is already connected.");
+
+      console.log('hello');
+    });
+
+    socket.on("noReceivingDesktop", data => {
+      this.showConnectionError("No Desktop with same OTP found. Please recheck OTP and try again.");
+
+      console.log('hello2');
+    });
 
     socket.on("modeChange", data => {
       //console.log('modeChange');
@@ -220,12 +246,14 @@ class App extends React.Component {
 
   submitOtp(otpValue) {
     console.log(otpValue);
-    //let newSocket = socketIOClient("http://192.168.0.11:8080?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
-    let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+
+    this.setState({ lastUsedOtp: otpValue });
+    let newSocket = socketIOClient("http://192.168.0.11:8080?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    //let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
 
 
     newSocket.on("connect", data => {
-      //console.og("connection has been made");
+      console.log("connection has been made");
 
       //let recentOTP = 'OTP-' + Date.now();
       let recentOTPsMapString = localStorage.getItem('recentOTPsMap');
@@ -254,7 +282,38 @@ class App extends React.Component {
 
       //console.og('connection from phone has been made');
     });
+
+    newSocket.on("connect_error", data => {
+      this.showConnectionError("Oops. Something went wrong. Please try again");
+    });
+
+    newSocket.on("connect_failed", data => {
+      this.showConnectionError("Oops. Our server is down. Please try after some time.");
+    });
+
   };
+
+
+  toggleHelp() {
+    this.setState({ showHelp: (!this.state.showHelp) });
+  };
+
+  forceLoginfunction() {
+    console.log(this.state.socket);
+    console.log(this.state.lastUsedOtp);
+    if (this.state.socket != null)
+      this.state.socket.emit("forceLogin", this.state.lastUsedOtp);
+
+  }
+
+  clearAlertFunction() {
+    if (this.state.dislpayConnectionError != false) {
+      this.setState({
+        dislpayConnectionError: false
+      });
+    }
+
+  }
 
 
   render() {
@@ -270,10 +329,22 @@ class App extends React.Component {
     }
     let recentOTPBox = <div className="recentOTPBox"><h3>{recentOTPsHeading}</h3>{recentOTPButtons}</div>
 
-    let mainBox = <div><OtpBox submitMethod={this.submitOtp}></OtpBox>
+    let mainBox = <div><OtpBox submitMethod={this.submitOtp}
+      forceLogin={this.forceLoginfunction} clearAlert={this.clearAlertFunction}
+      showConnectionError={this.state.dislpayConnectionError}></OtpBox>
       {recentOTPBox}
     </div>;
 
+    let helpCloseButton = null;
+    //let connectionError = null;
+
+
+    if (!this.state.showHelp) {
+      helpCloseButton = <span onClick={this.toggleHelp}>?</span>
+    }
+    else {
+      helpCloseButton = <span className="removeBorder" onClick={this.toggleHelp}>Close</span>
+    }
 
     if (mode == 'view' && service == 'netflix') {
       mainBox = <NetflixWatch socket={this.state.socket}
@@ -293,6 +364,16 @@ class App extends React.Component {
     return (
       <div>
         {mainBox}
+        <div class="remoteGuideBox">
+          {helpCloseButton}
+        </div>
+        <div className={this.state.showHelp ? 'helpBox' : 'helpBoxClosed'}>
+          <span onclick={this.toggleHelp}></span>
+          <img src="helpImage.png" alt="Help for remote Control"
+            className={this.state.showHelp ? 'showHelpImage' : 'dontShowHelpImage'}>
+          </img>
+
+        </div>
       </div>
     );
   }

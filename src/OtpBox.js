@@ -5,16 +5,20 @@ class OtpBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      otpValue: null
+      otpValue: null,
+      connectionError: '',
+      showForceLogin: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.forceLoginFunction = this.forceLoginFunction.bind(this);
     //this.textInput = React.createRef();
     // this.focusTextInput = this.focusTextInput.bind(this);
   }
 
   handleChange(event) {
     this.setState({ otpValue: event.target.value });
+    this.props.clearAlert();
   }
 
   focusTextInput() {
@@ -31,21 +35,58 @@ class OtpBox extends React.Component {
 
   }
 
+  componentDidUpdate(prevProps) {
+    console.log('component did update');
+    console.log(prevProps.showConnectionError);
+    console.log(this.props.showConnectionError);
+    if (prevProps.showConnectionError !== this.props.showConnectionError) {
+      console.log('change');
+      let displayForceLogin = false;
+      if (this.props.showConnectionError == "One phone is already connected.") {
+        displayForceLogin = true;
+      }
+      console.log(displayForceLogin);
+      this.setState({
+        connectionError: this.props.showConnectionError,
+        showForceLogin: displayForceLogin
+      });
+    }
+  }
+
+
+  forceLoginFunction() {
+    this.props.forceLogin();
+  }
+
   render() {
+    console.log('renderedd');
+    let alertText = <p>{this.state.connectionError}</p>;
+    //let forceLogin = null;
+    if (this.state.showForceLogin) {
+      console.log('asdsd');
+      alertText = <p>One phone is already connected.
+        <span role="button" className="forceLoginButton" onClick={this.forceLoginFunction}>Force Login?</span>
+      </p>
+    }
     return (
 
       <div>
         <h1>FlixRemote</h1>
         <div>
           <form onSubmit={this.handleSubmit}>
-            <label htmlFor="inputOtp">Please Enter Passcode</label>
+            <label htmlFor="inputOtp">Please Enter 6 Digit Passcode</label>
             <input type="text" pattern="[0-9]{6}" id="inputOtp"
-              onChange={this.handleChange}
+              onChange={this.handleChange} maxLength="6"
+              oninvalid="this.setCustomValidity('Enter 6 Digit Passcode')"
+              oninput="this.setCustomValidity('')"
               /*placeholder="Please enter passcode"*/
-              autoComplete="off"
+              autoComplete="off" required
             />
             <input type="submit" value="Submit"></input>
           </form>
+          <div role="alert" aria-live="polite">
+            {alertText}
+          </div>
         </div>
       </div>
     );

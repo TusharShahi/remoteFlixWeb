@@ -7,6 +7,43 @@
   pointer-events: none;
 }
 
+.helpBox{
+  margin: 0;
+  padding: 0;  
+}
+
+.helpBoxClosed{
+ 
+}
+
+.showHelpImage{
+  width: 90%;
+  margin: 20px auto;
+}
+
+.dontShowHelpImage{ 
+  height: 0;
+  width: 0;
+}
+
+.remoteGuideBox{  
+  z-index: 2;
+  position : relative;
+  margin-top: 100px;
+}
+
+.remoteGuideBox span{
+  border-radius: 100%;
+  border: 2px solid #fff;
+  display: block;
+    width: 20px;
+    margin: 0 auto;
+}
+
+.removeBorder{ 
+  border : 0px !important;
+  width: 50px !important;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -52,4 +89,11 @@
 }
 .recentOTPButton:hover{
   background: #8a0e14;
+}
+
+.helpBox{
+  position: absolute;
+  top: 0;
+  right: 0
+
 }
