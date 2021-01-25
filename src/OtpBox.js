@@ -13,6 +13,7 @@ class OtpBox extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.forceLoginFunction = this.forceLoginFunction.bind(this);
+    this.sendScannedOTP = this.sendScannedOTP.bind(this);
     //this.textInput = React.createRef();
     // this.focusTextInput = this.focusTextInput.bind(this);
   }

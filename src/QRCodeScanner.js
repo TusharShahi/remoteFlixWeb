@@ -65,7 +65,8 @@ class QRCodeScanner extends Component {
         if (videoElements.length > 0) {
             inputVideo = videoElements[0];
             navigator.mediaDevices.getUserMedia({
-                video: {
+                video:
+                {
                     facingMode:
                         { exact: 'environment' }
                 }, audio: false
