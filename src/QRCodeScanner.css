@@ -4,4 +4,6 @@
 
 canvas{
     visibility: hidden;
+    position: absolute;
+    right: 2000px;
 }
