@@ -1,5 +1,6 @@
 import React from "react";
 import "./OtpBox.css";
+import QRCodeScanner from "./QRCodeScanner";
 
 class OtpBox extends React.Component {
   constructor(props) {
@@ -53,6 +54,9 @@ class OtpBox extends React.Component {
     }
   }
 
+  sendScannedOTP(otpValue) {
+    this.props.submitMethod(otpValue);
+  }
 
   forceLoginFunction() {
     this.props.forceLogin();
@@ -72,6 +76,10 @@ class OtpBox extends React.Component {
 
       <div>
         <h1>FlixRemote</h1>
+        <div>
+          <QRCodeScanner onSuccessfulScan={this.sendScannedOTP}></QRCodeScanner>
+
+        </div>
         <div>
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="inputOtp">Please Enter 6 Digit Passcode</label>

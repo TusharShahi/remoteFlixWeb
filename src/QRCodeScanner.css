@@ -1,0 +1,7 @@
+.Camera{
+    margin: 0 auto;
+}
+
+canvas{
+    visibility: hidden;
+}

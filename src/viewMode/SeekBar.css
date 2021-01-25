@@ -1,0 +1,38 @@
+#audioplayer{
+	width: 480px;
+	height: 60px;
+	margin: 50px auto auto auto;
+  border: solid;
+}
+
+#pButton{
+    height:60px; 
+    width: 60px;
+    border: none;
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    float:left;
+    outline:none;
+}
+
+#timeline{
+	width: 400px;
+	height: 10px;
+	float: left;
+	border-radius: 15px;
+	background: #222;
+	border : 0;
+	padding: 0;
+  
+}
+#playhead{
+	padding : 0;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background-color: #e50914;
+	position: relative;
+	bottom: 2px;
+	cursor: pointer;
+}

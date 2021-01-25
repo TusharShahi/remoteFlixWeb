@@ -3,6 +3,9 @@ import socketIOClient from "socket.io-client";
 import OtpBox from "./OtpBox"
 import NetflixWatch from "./viewMode/NetflixWatch";
 import NetflixPremier from "./viewMode/NetflixPremier";
+import HelpBox from "./HelpBox";
+import { Route, Switch } from "react-router-dom";
+
 
 import "./App.css";
 
@@ -14,6 +17,7 @@ const PORT = "8080";
 class App extends React.Component {
 
 
+  progressLock = false;
 
   constructor(props) {
     super(props);
@@ -36,7 +40,12 @@ class App extends React.Component {
       showHelp: false,
       dislpayConnectionError: false,
       heartBeat: null,
-      lastUsedOtp: null
+      lastUsedOtp: null,
+      muteState: false,
+      skipElement: false,
+
+      duration: 0,
+      progress: 0,
     };
 
 
@@ -49,6 +58,8 @@ class App extends React.Component {
     this.showConnectionError = this.showConnectionError.bind(this);
     this.forceLoginfunction = this.forceLoginfunction.bind(this);
     this.clearAlertFunction = this.clearAlertFunction.bind(this);
+
+    this.changeProgress = this.changeProgress.bind(this);
   }
 
   heartBeatFunction() {
@@ -57,22 +68,45 @@ class App extends React.Component {
 
   }
 
-  componentDidMount() {
-    let recentOTPsMapString = localStorage.getItem('recentOTPsMap');
-    let recentOTPsMap = new Map();
+
+
+  generateOTPsList(recentOTPsMapString, recentOTPsMap) {
+
     let recentOTPsList = [];
     if (recentOTPsMapString != null) {
       recentOTPsMap = JSON.parse(recentOTPsMapString);
-      console.log(recentOTPsMap);
-      console.log(typeof (recentOTPsMap));
-      for (let key of Object.keys(recentOTPsMap)) {
+
+      let otps = Object.keys(recentOTPsMap).map(function (key) {
+        return [key, recentOTPsMap[key]];
+      });
+
+      console.log(otps);
+
+      // Sort the array based on the second element
+      otps.sort(function (first, second) {
+        return second[1] - first[1];
+      });
+
+      /*for (let key of Object.keys(otps)) {
         if (key != null)
-          if (Date.now() - recentOTPsMap[key] < 51840000) {
+          if (Date.now() - otps[key] < 51840000) {
             recentOTPsList.push(key);
           }
-      }
+      }*/
 
+      recentOTPsList = [otps[0][0]];
     }
+
+    return recentOTPsList;
+
+  }
+
+
+  componentDidMount() {
+    let recentOTPsMapString = localStorage.getItem('recentOTPsMap');
+    let recentOTPsMap = new Map();
+
+    let recentOTPsList = this.generateOTPsList(recentOTPsMapString, recentOTPsMap);
 
     this.setState({
       recentOTPs: recentOTPsList
@@ -90,21 +124,9 @@ class App extends React.Component {
     console.log('go to landing page');
     let recentOTPsMapString = localStorage.getItem('recentOTPsMap');
     let recentOTPsMap = new Map();
-    let recentOTPsList = [];
-    if (recentOTPsMapString != null) {
-      recentOTPsMap = JSON.parse(recentOTPsMapString);
-      console.log(recentOTPsMap);
-      console.log(typeof (recentOTPsMap));
-      for (let key of Object.keys(recentOTPsMap)) {
-        if (key != null) {
-          if (Date.now() - recentOTPsMap[key] < 51840000) {
-            recentOTPsList.push(key);
-          }
 
-        }
-      }
+    let recentOTPsList = this.generateOTPsList(recentOTPsMapString, recentOTPsMap);
 
-    }
 
     this.setState({
       socket: null,
@@ -233,7 +255,36 @@ class App extends React.Component {
 
     });
 
+    socket.on("muteState", data => {
+      console.log("received muteState");
+      console.log(data);
+      this.setState({
+        muteState: data
+      });
 
+    });
+
+    socket.on("changeSkipElement", data => {
+      this.setState({
+        skipElement: data
+      });
+    });
+
+    socket.on("durationProgressData", data => {
+      console.log("durationData incoming");
+      if (!this.progressLock) {
+        this.setState({
+          progress: data.progress,
+          duration: data.duration
+
+        });
+
+      }
+      else {
+        console.log("locked");
+
+      }
+    });
   }
 
   nextEpisode() {
@@ -248,8 +299,8 @@ class App extends React.Component {
     console.log(otpValue);
 
     this.setState({ lastUsedOtp: otpValue });
-    //let newSocket = socketIOClient("http://192.168.0.11:8080?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
-    let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    let newSocket = socketIOClient("http://192.168.1.12:8080?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    //let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
 
 
     newSocket.on("connect", data => {
@@ -315,17 +366,34 @@ class App extends React.Component {
 
   }
 
+  changeProgress(data) {
+    //this.progressLock = true;
+    console.log("change progress " + data.currentTime);
+    this.setState({
+      progress: data.currentTime
+    });
+    this.state.socket.emit("changeProgress", data);
+
+    setTimeout(() => {
+      console.log("removed progresslock");
+      this.progressLock = false;
+    }, 200);
+  }
+
 
   render() {
     let mode = this.state.mode;
     let service = this.state.service;
     //console.og(mode);
     //console.og(service);
-    let recentOTPButtons = this.state.recentOTPs.map((x) => <span className="recentOTPButton" onClick={() => this.submitOtp(x)} >{x}</span>);
+
+
+    let recentOTPButtons = "";
     let recentOTPsHeading = "";
 
     if (this.state.recentOTPs.length > 0) {
       recentOTPsHeading = "Recent OTPs :"
+      recentOTPButtons = this.state.recentOTPs.map((x) => <span className="recentOTPButton" onClick={() => this.submitOtp(x)} >{x}</span>);
     }
     let recentOTPBox = <div className="recentOTPBox"><h3>{recentOTPsHeading}</h3>{recentOTPButtons}</div>
 
@@ -347,12 +415,20 @@ class App extends React.Component {
     }
 
     if (mode == 'view' && service == 'netflix') {
+      if (this.state.skipElement == 'next') {
+
+
+      }
+
       mainBox = <NetflixWatch socket={this.state.socket}
         episodesList={this.state.episodes} selectedEpisode={this.state.selectedEpisode} selectedEpisodeIndex={this.state.selectedEpisodeIndex}
         audioTracks={this.state.audioTracks} selectedAudio={this.state.selectedAudio}
         subtitleTracks={this.state.subtitleTracks} selectedSubtitle={this.state.selectedSubtitle}
-        playbackSpeed={this.state.playbackSpeed}
-        onNextEpisode={this.nextEpisode}
+        playbackSpeed={this.state.playbackSpeed} muteState={this.state.muteState} skipElement={this.state.skipElement}
+        duration={this.state.duration} progress={this.state.progress}
+        onNextEpisode={this.nextEpisode} passCode={this.state.lastUsedOtp}
+        progressLock={this.progressLock}
+        onChangeProgress={this.changeProgress}
       ></NetflixWatch>
     }
     else if (mode == 'browse' && service == 'netflix') {
@@ -367,14 +443,19 @@ class App extends React.Component {
         <div class="remoteGuideBox">
           {helpCloseButton}
         </div>
-        <div className={this.state.showHelp ? 'helpBox' : 'helpBoxClosed'}>
+        <div id='helpBoxMain' className={this.state.showHelp ? 'helpBox' : 'helpBoxClosed'}>
           <span onclick={this.toggleHelp}></span>
           <img src="helpImage.png" alt="Help for remote Control"
             className={this.state.showHelp ? 'showHelpImage' : 'dontShowHelpImage'}>
           </img>
 
         </div>
+
+
+        <Route exact path="/help"><HelpBox /></Route>
       </div>
+
+
     );
   }
 }

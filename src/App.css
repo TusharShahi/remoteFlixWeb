@@ -16,6 +16,12 @@
  
 }
 
+#helpBoxMain{
+  padding: 50% 0%;
+  margin: 0 auto;
+  background-color: #000;
+}
+
 .showHelpImage{
   width: 90%;
   margin: 20px auto;

@@ -4,9 +4,13 @@ import SelectList from "./SelectList";
 
 import SmackButton from "./SmackButton"
 import "./NetflixWatch.css";
+import SeekBar from "./SeekBar";
 
 
 class NetflixWatch extends React.Component {
+
+
+
   constructor(props) {
     super(props);
 
@@ -29,14 +33,21 @@ class NetflixWatch extends React.Component {
       selectedEpisode: initialSelectedEpisode,
       selectedAudio: initialSelectedAudio,
       selectedSub: initialSelectedSub,
-      playbackSpeed: this.props.playbackSpeed
+      playbackSpeed: this.props.playbackSpeed,
+      muteState: this.props.muteState,
+      passCode: this.props.passCode,
+      skipElement: this.props.skipElement,
 
+      progress: this.props.progress,
+      duration: this.props.duration
     };
 
 
     this.nextEpisode = this.nextEpisode.bind(this);
     this.changeSelection = this.changeSelection.bind(this);
     this.changeSpeed = this.changeSpeed.bind(this);
+    this.changeProgress = this.changeProgress.bind(this);
+
   }
 
 
@@ -61,13 +72,22 @@ class NetflixWatch extends React.Component {
         playbackSpeed: this.props.playbackSpeed
       });
     }
-    if (prevProps.selectedEpisodeIndex !== this.props.selectedEpisodeIndex) {
-      console.log("change in selcted episode index " + this.props.selectedEpisodeIndex);
+    if (prevProps.muteState !== this.props.muteState) {
       this.setState({
-        selectedEpisode: this.props.episodesList[this.props.selectedEpisodeIndex]
+        muteState: this.props.muteState
       });
 
 
+    }
+    if (prevProps.selectedEpisodeIndex !== this.props.selectedEpisodeIndex) {
+      this.setState({
+        selectedEpisode: this.props.episodesList[this.props.selectedEpisodeIndex]
+      });
+    }
+    if (prevProps.skipElement !== this.props.skipElement) {
+      this.setState({
+        skipElement: this.props.skipElement
+      });
     }
   }
 
@@ -102,21 +122,22 @@ class NetflixWatch extends React.Component {
   }
 
   changeSpeed(event) {
-    console.log(event);
-    console.log("change speed");
-    console.log(event.target.value);
     this.props.socket.emit("changePlaybackSpeed", event.target.value);
+  }
+
+  changeVolume(event) {
+    this.props.socket.emit("changeVolume", event.target.value);
+  }
+
+  changeProgress(data) {
+    this.props.onChangeProgress(data);
   }
 
   render() {
     //console.log('rendered netflixwatch');
     //console.log(this.props.selectedEpisodeIndex);
-    console.log(this.state.selectedEpisode);
-
-    console.log(this.state.selectedSubtitle);
-    console.log(this.state.selectedAudio);
     let playbackSpeedRate = this.props.playbackSpeed;
-    console.log(playbackSpeedRate);
+    //console.log(playbackSpeedRate);
     //this.setState({ selectedEpisodeIndex: this.props.selectedEpisodeIndex });
     let episodeSelectComponent = <div></div>;
     if (this.props.selectedEpisode != null) {
@@ -126,7 +147,13 @@ class NetflixWatch extends React.Component {
 
         ></SelectList></div>;
     }
-    let skipIntroButton = <SimpleButton type='skipIntro' socket={this.props.socket}></SimpleButton>
+    let skipIntroButton = '';
+    if (this.props.skipElement == 'skip') {
+      skipIntroButton = <SimpleButton type='skipIntro' socket={this.props.socket}></SimpleButton>
+    }
+    //else if (this.props.skipElement == 'next') {
+    //skipIntroButton = <SimpleButton type='skipCredits' socket={this.props.socket}></SimpleButton>
+    //}
 
 
     return (
@@ -134,14 +161,34 @@ class NetflixWatch extends React.Component {
 
 
 
+
         <div className="topControlsBox">
 
-          <SimpleButton type='muteToggle' socket={this.props.socket}></SimpleButton>
+          <SimpleButton type='muteToggle' socket={this.props.socket} isMute={this.state.muteState}></SimpleButton>
           <SimpleButton type='close' socket={this.props.socket}></SimpleButton>
           <SmackButton socket={this.props.socket} type="smackTV"></SmackButton>
 
         </div>
+        {/*
+        <div className="volumeControlsBox">
 
+
+          <div className="muteBox">
+            <SimpleButton muteState={isMute} type='muteToggle' socket={this.props.socket}></SimpleButton>
+          </div>
+          <div className="container">
+            <div className="slider">
+              <input type="range" orient="vertical" min="0" max="1" step="0.01" value={playbackSpeedRate} onInput={this.changeSpeed} />
+            </div>
+          </div>
+        </div>
+        */}
+
+        {/* <div>
+          <SeekBar socket={this.props.socket} progressLock={this.props.progressLock}
+            duration={this.props.duration} currentTime={this.props.progress}
+            onChangeProgress={this.changeProgress}></SeekBar>
+       </div> */}
 
         <div>
 
@@ -194,6 +241,7 @@ class NetflixWatch extends React.Component {
 
 
 
+
         {episodeSelectComponent}
 
         <div className='tracksBox'>
@@ -207,6 +255,14 @@ class NetflixWatch extends React.Component {
             <SelectList socket={this.props.socket} inputs={this.props.audioTracks} name='audio' selectedValue={this.state.selectedAudio}></SelectList>
           </div>
 
+        </div>
+
+        {/* <div>
+          <VolumeSlider></VolumeSlider>
+        </div>*/}
+
+        <div>
+          <p>{"Passcode : " + this.state.passCode}</p>
         </div>
 
         <h1>Netflix View Mode</h1>
