@@ -35,7 +35,7 @@ class SimpleButton extends React.Component {
 
   render() {
     let buttonType = this.state.buttonType;
-    let divClassName = this.state.buttonType + 'Div';
+    let divClassName = 'simpleButton ' + this.state.buttonType + 'Div';
     let button;
     if (buttonType == 'close') {
       button = <span className='closeButton'><i class="fas fa-power-off"></i></span>

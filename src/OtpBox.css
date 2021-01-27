@@ -4,10 +4,11 @@
 div{
 
     text-align: center;
-    padding : 5% 2% 2% 2%;
+    /*padding : 5% 2% 2% 2%;*/
 }
 
-div h1{
+div h1.appHeading{
+    font-size: 40px;
     text-transform: uppercase;
     font-family : 'Raleway';
     font-weight: 900;

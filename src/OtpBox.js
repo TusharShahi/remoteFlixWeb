@@ -76,14 +76,14 @@ class OtpBox extends React.Component {
     return (
 
       <div>
-        <h1>FlixRemote</h1>
+        <h1 className='appHeading'>FlixRemote</h1>
         <div>
           <QRCodeScanner onSuccessfulScan={this.sendScannedOTP}></QRCodeScanner>
 
         </div>
         <div>
           <form onSubmit={this.handleSubmit}>
-            <label htmlFor="inputOtp">Please Enter 6 Digit Passcode</label>
+            <label htmlFor="inputOtp">Enter 6 Digit Passcode</label>
             <input
               type="text" pattern="[0-9]{6}" id="inputOtp"
               inputmode="numeric"

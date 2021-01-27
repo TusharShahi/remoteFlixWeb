@@ -63,8 +63,6 @@ class QRCodeScanner extends Component {
         let videoElements = document.getElementsByTagName('video');
         let inputVideo = null;
         if (videoElements.length > 0) {
-            let windowHeight = window.screen.height - 300;
-            let windowWidth = window.screen.width;
             inputVideo = videoElements[0];
             navigator.mediaDevices.getUserMedia({
                 video:
@@ -72,8 +70,8 @@ class QRCodeScanner extends Component {
                     facingMode:
                         { exact: 'environment' }
                     ,
-                    width: { min: windowWidth - 20 },
-                    height: { min: windowHeight - 100 }
+                    width: { min: window.innerWidth - 20 },
+                    height: { min: window.height - 100 }
                 }, audio: false
             })
                 .then((stream) => {
