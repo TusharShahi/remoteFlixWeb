@@ -84,7 +84,9 @@ class OtpBox extends React.Component {
         <div>
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="inputOtp">Please Enter 6 Digit Passcode</label>
-            <input type="text" pattern="[0-9]{6}" id="inputOtp"
+            <input
+              type="text" pattern="[0-9]{6}" id="inputOtp"
+              inputmode="numeric"
               onChange={this.handleChange} maxLength="6"
               oninvalid="this.setCustomValidity('Enter 6 Digit Passcode')"
               oninput="this.setCustomValidity('')"

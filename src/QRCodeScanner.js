@@ -12,7 +12,7 @@ class QRCodeScanner extends Component {
         this.state = {
             result: 'No result',
             streaming: false,
-            width: window.innerWidth - 120,
+            width: window.innerWidth - 20,
             height: 0,
             canvas: null,
             takePictureInterval: null
@@ -63,12 +63,17 @@ class QRCodeScanner extends Component {
         let videoElements = document.getElementsByTagName('video');
         let inputVideo = null;
         if (videoElements.length > 0) {
+            let windowHeight = window.screen.height - 300;
+            let windowWidth = window.screen.width;
             inputVideo = videoElements[0];
             navigator.mediaDevices.getUserMedia({
                 video:
                 {
                     facingMode:
                         { exact: 'environment' }
+                    ,
+                    width: { min: windowWidth - 20 },
+                    height: { min: windowHeight - 100 }
                 }, audio: false
             })
                 .then((stream) => {

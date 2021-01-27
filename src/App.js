@@ -299,8 +299,8 @@ class App extends React.Component {
     console.log(otpValue);
 
     this.setState({ lastUsedOtp: otpValue });
-    //let newSocket = socketIOClient("http://192.168.1.12:8080?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
-    let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    let newSocket = socketIOClient("http://192.168.1.12:8080?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    //let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
 
 
     newSocket.on("connect", data => {
@@ -392,10 +392,10 @@ class App extends React.Component {
     let recentOTPsHeading = "";
 
     if (this.state.recentOTPs.length > 0) {
-      recentOTPsHeading = "Recent OTPs :"
+      recentOTPsHeading = "Reconnect with"
       recentOTPButtons = this.state.recentOTPs.map((x) => <span className="recentOTPButton" onClick={() => this.submitOtp(x)} >{x}</span>);
     }
-    let recentOTPBox = <div className="recentOTPBox"><h3>{recentOTPsHeading}</h3>{recentOTPButtons}</div>
+    let recentOTPBox = <div className="recentOTPBox"><span>{recentOTPsHeading}</span>{recentOTPButtons}</div>
 
     let mainBox = <div><OtpBox submitMethod={this.submitOtp}
       forceLogin={this.forceLoginfunction} clearAlert={this.clearAlertFunction}

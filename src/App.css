@@ -35,7 +35,7 @@
 .remoteGuideBox{  
   z-index: 2;
   position : relative;
-  margin-top: 100px;
+  margin-top: 20px;
 }
 
 .remoteGuideBox span{
@@ -89,7 +89,6 @@
   padding: 4px; 
   color : #fff;
   background :  #e50914;
-  display: block;
   font-size: 90%;
   font-weight: 600;
 }
