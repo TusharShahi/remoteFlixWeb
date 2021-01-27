@@ -71,7 +71,7 @@ class QRCodeScanner extends Component {
                         { exact: 'environment' }
                     ,
                     width: { min: window.innerWidth - 20 },
-                    height: { min: window.height - 100 }
+                    height: { min: window.innerHeight - 200 }
                 }, audio: false
             })
                 .then((stream) => {

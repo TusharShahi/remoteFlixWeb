@@ -10,6 +10,9 @@ class OtpBox extends React.Component {
       connectionError: '',
       showForceLogin: false
     }
+
+    this.errorStatement = React.createRef();
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.forceLoginFunction = this.forceLoginFunction.bind(this);
@@ -52,6 +55,11 @@ class OtpBox extends React.Component {
         connectionError: this.props.showConnectionError,
         showForceLogin: displayForceLogin
       });
+      /*if (this.props.showConnectionError !== '') {
+        console.log("show error");
+        this.errorStatement.current.focus();
+
+      }*/
     }
   }
 
@@ -65,11 +73,12 @@ class OtpBox extends React.Component {
 
   render() {
     console.log('renderedd');
-    let alertText = <p>{this.state.connectionError}</p>;
+
+    let alertText = <p ref={this.errorStatement}>{this.state.connectionError}</p>;
     //let forceLogin = null;
     if (this.state.showForceLogin) {
       console.log('asdsd');
-      alertText = <p>One phone is already connected.
+      alertText = <p ref={this.errorStatement}>One phone is already connected.
         <span role="button" className="forceLoginButton" onClick={this.forceLoginFunction}>Force Login?</span>
       </p>
     }
