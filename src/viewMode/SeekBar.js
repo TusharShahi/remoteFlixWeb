@@ -4,7 +4,7 @@ import "./SeekBar.css";
 class SeekBar extends React.Component {
 
     onplayhead = false;
-
+    lockTimeLine = false;
     constructor(props) {
         super(props);
         this.state = {
@@ -32,18 +32,22 @@ class SeekBar extends React.Component {
 
         }
         if (prevProps.currentTime !== this.props.currentTime) {
-            this.setState({
-                currentTime: this.props.currentTime
-            });
-            //console.log("changing");
-            let playhead = document.getElementById('playhead'); // playhead
-            let timeline = document.getElementById('timeline'); // timeline
+            if (this.lockTimeLine != true) {
 
-            // timeline width adjusted for playhead    
-            let timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
+                this.setState({
+                    currentTime: this.props.currentTime
+                });
+                //console.log("changing");
+                let playhead = document.getElementById('playhead'); // playhead
+                let timeline = document.getElementById('timeline'); // timeline
 
-            let playPercent = timelineWidth * (this.state.currentTime / this.state.duration);
-            playhead.style.marginLeft = playPercent + "px";
+                // timeline width adjusted for playhead    
+                let timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
+
+                let playPercent = timelineWidth * (this.state.currentTime / this.state.duration);
+                playhead.style.marginLeft = playPercent + "px";
+
+            }
 
         }
     }
@@ -81,6 +85,7 @@ class SeekBar extends React.Component {
     }
 
     playheadMouseDown(event) {
+        console.log("on mouse down");
         window.addEventListener('mousemove', this.mouseMoveEventHandler, false);
         //window.addEventListener('touchmove', this.mouseMoveEventHandler, false);
 
@@ -126,6 +131,10 @@ class SeekBar extends React.Component {
     }
 
     moveplayhead(event) {
+        this.lockTimeLine = true;
+        setTimeout(() => {
+            this.lockTimeLine = false;
+        }, 3500);
         //window.alert("yeah");
         let playhead = document.getElementById('playhead'); // playhead
         let timeline = document.getElementById('timeline'); // timeline
@@ -174,12 +183,13 @@ class SeekBar extends React.Component {
         let s = Math.floor(number % 3600 % 60);
 
         let hDisplay = h > 0 ? h + ":" : "";
-        let mDisplay = m > 0 ? m + ":" : "";
-        let sDisplay = s;
+        let mDisplay = m > -1 ? m < 10 ? "0" + m + ":" : m + ":" : "";
+        let sDisplay = s > -1 ? s < 10 ? "0" + s : s : "";
         return hDisplay + mDisplay + sDisplay;
     }
 
     convertChangeToKeyPress(currentTime, playVideo) {
+        console.log("converting to key press");
         let keyType = 'left';
         if (currentTime > this.state.currentTime) {
             keyType = 'right';
@@ -194,6 +204,7 @@ class SeekBar extends React.Component {
             'diff': Math.abs(currentTime - this.state.currentTime),
             'currentTime': currentTime
         }
+        console.log(dataToBePassed);
         //this.props.socket.emit("changeProgress", dataToBePassed);
         this.props.onChangeProgress(dataToBePassed);
     }

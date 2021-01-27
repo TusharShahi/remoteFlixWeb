@@ -184,11 +184,11 @@ class NetflixWatch extends React.Component {
         </div>
         */}
 
-        {/* <div>
+        <div>
           <SeekBar socket={this.props.socket} progressLock={this.props.progressLock}
             duration={this.props.duration} currentTime={this.props.progress}
             onChangeProgress={this.changeProgress}></SeekBar>
-       </div> */}
+        </div>
 
         <div>
 
@@ -226,7 +226,7 @@ class NetflixWatch extends React.Component {
         <div id="playbackSpeedBox">
           <div class="container">
             <div class="slider">
-              <input type="range" min="0.5" max="2" step="0.25" value={playbackSpeedRate} onInput={this.changeSpeed} />
+              <input type="range" min="0.5" max="1.5" step="0.25" value={playbackSpeedRate} onInput={this.changeSpeed} />
               <span className="outputRange">Speed: {playbackSpeedRate}</span>
             </div>
           </div>
@@ -265,7 +265,7 @@ class NetflixWatch extends React.Component {
           <p>{"Passcode : " + this.state.passCode}</p>
         </div>
 
-        <h1>Netflix View Mode</h1>
+        <h1 className="appHeading">Netflix View Mode</h1>
       </div>
     );
   }
