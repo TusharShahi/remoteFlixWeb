@@ -5,6 +5,7 @@ class SeekBar extends React.Component {
 
     onplayhead = false;
     lockTimeLine = false;
+    previousValue = null;
     constructor(props) {
         super(props);
         this.state = {
@@ -20,8 +21,12 @@ class SeekBar extends React.Component {
         this.formatTime = this.formatTime.bind(this);
         this.mouseMoveEventHandler = this.mouseMoveEventHandler.bind(this);
         this.mouseUpEventHandler = this.mouseUpEventHandler.bind(this);
+        this.party = this.party.bind(this);
     }
 
+    party() {
+        console.log('xxxaaax');
+    }
 
     componentDidUpdate(prevProps) {
         if (prevProps.duration !== this.props.duration) {
@@ -32,22 +37,31 @@ class SeekBar extends React.Component {
 
         }
         if (prevProps.currentTime !== this.props.currentTime) {
-            if (this.lockTimeLine != true) {
+            console.log(this.lockTimeLine);
 
-                this.setState({
-                    currentTime: this.props.currentTime
-                });
-                //console.log("changing");
-                let playhead = document.getElementById('playhead'); // playhead
-                let timeline = document.getElementById('timeline'); // timeline
 
-                // timeline width adjusted for playhead    
-                let timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
+            this.setState({
+                currentTime: this.props.currentTime
+            });
+            //console.log("changing");
+            let playhead = document.getElementById('playhead'); // playhead
+            let timeline = document.getElementById('timeline'); // timeline
 
-                let playPercent = timelineWidth * (this.state.currentTime / this.state.duration);
-                playhead.style.marginLeft = playPercent + "px";
+            // timeline width adjusted for playhead    
+            let timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
 
+            let playPercent = timelineWidth * (this.state.currentTime / this.state.duration);
+            //console.log(playPercent);
+            //console.log(this.previousValue);
+            if (this.lockTimeLine == true &&
+                (this.previousValue != null && Math.abs(playPercent - this.previousValue) < 2)) {
             }
+            else {
+                //console.log(playPercent);
+                playhead.style.marginLeft = playPercent + "px";
+            }
+
+
 
         }
     }
@@ -80,6 +94,11 @@ class SeekBar extends React.Component {
         this.moveplayhead(event);
         //Emit current time 
         let currentTime = this.state.duration * this.clickPercent(event);
+
+        let playhead = document.getElementById('playhead'); // playhead
+        let playHeadMarginLeft = playhead.style.marginLeft;
+        this.previousValue = parseFloat(playHeadMarginLeft.split('p')[0]);
+
         this.convertChangeToKeyPress(currentTime, true);
         //this.props.socket.emit("changeProgress", currentTime);
     }
@@ -134,7 +153,7 @@ class SeekBar extends React.Component {
         this.lockTimeLine = true;
         setTimeout(() => {
             this.lockTimeLine = false;
-        }, 3500);
+        }, 2000);
         //window.alert("yeah");
         let playhead = document.getElementById('playhead'); // playhead
         let timeline = document.getElementById('timeline'); // timeline
@@ -170,7 +189,10 @@ class SeekBar extends React.Component {
     mouseUpSeekbar(event) {
         if (this.onplayhead == true) {
             this.moveplayhead(event);
-            //window.removeEventListener('mousemove', this.moveplayhead, true);
+            let playhead = document.getElementById('playhead'); // playhead
+            let playHeadMarginLeft = playhead.style.marginLeft;
+            this.previousValue = parseFloat(playHeadMarginLeft.split('p')[0]);
+            //window.removeEventListener('mousemove', Lethis.moveplayhead, true);
             //let currentTime = this.duration * this.clickPercent(event);
             //Emit play
         }
@@ -228,9 +250,9 @@ class SeekBar extends React.Component {
 
         return (
             <div id="audioplayer">
-                <div id="timeline" onClick={this.timelineClick}>
-                    <div id="playhead" tabindex="0"
-                        onMouseDown={this.playheadMouseDown}></div>
+                <div id="timeline" onClick={this.timelineClick} onMouseDown={this.party}>
+                    <scan id="playhead" tabindex="0"
+                        onMouseDown={this.playheadMouseDown}></scan>
                 </div>
                 <span>
                     {formattedTime}

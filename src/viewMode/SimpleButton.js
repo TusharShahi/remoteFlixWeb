@@ -16,7 +16,7 @@ class SimpleButton extends React.Component {
 
   clickButton() {
     //console.og("callButton is called");
-
+    console.log(this.props.type);
     if (this.state.buttonType == 'close')
       this.props.socket.disconnect();
     else if (this.state.buttonType == 'scan')

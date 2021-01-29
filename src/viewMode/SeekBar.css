@@ -37,10 +37,11 @@
 	padding : 0;
 	width: 15px;
 	height: 15px;
+	display: block;
 	border-radius: 50%;
 	background-color: #e50914;
 	position: relative;
 	bottom: 2px;
 	cursor: pointer;
-	display: inline-block;
+	
 }
