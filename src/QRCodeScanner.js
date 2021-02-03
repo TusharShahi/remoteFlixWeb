@@ -63,6 +63,7 @@ class QRCodeScanner extends Component {
     }
 
     componentWillUnmount() {
+        clearInterval(this.takePictureInterval);
         this.stream.getTracks().forEach((track) => {
             track.stop();
         });
@@ -142,9 +143,7 @@ class QRCodeScanner extends Component {
         }
     }
 
-    componentWillUnmount() {
-        clearInterval(this.takePictureInterval);
-    }
+
 
     render() {
         return (
