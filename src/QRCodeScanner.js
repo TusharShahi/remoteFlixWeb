@@ -8,7 +8,11 @@ const regexForOTP = '^[0-9]{6}$';
 
 class QRCodeScanner extends Component {
     constructor(props) {
+
         super(props);
+
+        this.stream = null;
+
         this.state = {
             result: 'No result',
             streaming: false,
@@ -58,6 +62,11 @@ class QRCodeScanner extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.stream.getTracks().forEach((track) => {
+            track.stop();
+        });
+    }
 
     startScan() {
         let videoElements = document.getElementsByTagName('video');
@@ -74,12 +83,13 @@ class QRCodeScanner extends Component {
                     height: { min: window.innerHeight - 200 }
                 }, audio: false
             })
-                .then((stream) => {
-                    inputVideo.srcObject = stream;
+                .then((inputStream) => {
+                    inputVideo.srcObject = inputStream;
                     let canvasElement = document.getElementsByTagName('canvas')[0];
                     console.log(canvasElement);
                     this.setState({
-                        canvas: canvasElement
+                        canvas: canvasElement,
+                        stream: inputStream
                     });
                     console.log(this.state.canvas);
                     inputVideo.play();
