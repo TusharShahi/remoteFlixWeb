@@ -88,9 +88,9 @@ class QRCodeScanner extends Component {
                     let canvasElement = document.getElementsByTagName('canvas')[0];
                     console.log(canvasElement);
                     this.setState({
-                        canvas: canvasElement,
-                        stream: inputStream
+                        canvas: canvasElement
                     });
+                    this.stream = inputStream;
                     console.log(this.state.canvas);
                     inputVideo.play();
                 })
