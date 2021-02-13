@@ -64,9 +64,10 @@ class QRCodeScanner extends Component {
 
     componentWillUnmount() {
         clearInterval(this.takePictureInterval);
-        this.stream.getTracks().forEach((track) => {
-            track.stop();
-        });
+        if (this.stream != null)
+            this.stream.getTracks().forEach((track) => {
+                track.stop();
+            });
     }
 
     startScan() {
