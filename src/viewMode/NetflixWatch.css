@@ -1,25 +1,79 @@
 
+.helpBox{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  max-height: 100vh;
+  z-index: 200;
+
+}
 
 h1{ 
 font-size: 100%;
 }
 
+.titleBox{
+
+margin-top: 14%;
+}
+
+.mainTitle{ 
+font-size: 24px;
+font-weight: 500;
+font-family: var(--font-roboto-regular);
+color: var(--color-off-white);
+text-align: center;
+margin: 0;
+}
 
 .mainRemoteBox {
   padding: 5% 2% 2% 2%;
 
 }
 
+.topBox{
+  height: 40px;
+}
 
+
+.episodeSelectBox > span{ 
+  font-size: 20px;
+  text-align: center;
+  border: 1px solid #000;
+}
+.bottomBox{
+  display: flex;
+  flex-direction: row;
+  justify-content:  center ;
+  width: auto;
+  margin-top: 20px;
+  position: absolute;
+  bottom: 6%;
+  right: 2%;
+  left: 2%;
+
+}
+
+.bottomBox{
+ 
+}
+
+
+.bottomBox > div{
+  width: 18%;
+  padding-bottom: 0%;
+    padding-top: 5%;
+}
 .playControlsBox , .otherControlsBox, .connectionControlsBox,.volumeControlsBox{
     display: flex;
     flex-direction: row;
     justify-content:  center ;
 }
 
-.volumeControlsBox{ 
-  flex-direction: column;
-}
+
 
 .tracksBox{
     display: flex;
@@ -54,7 +108,31 @@ font-size: 100%;
     background: #222;
 }
 
-.volumeControlsBox , .pointControlsBox{  
+
+.tracksButtonBox{
+  font-family: var(--font-roboto-regular);
+  font-weight: 500;
+
+}
+
+.tracksButtonBox p{
+  font-size: 16px;
+  font-family: var(--font-roboto-regular);
+  font-weight: 500;
+  background-color: var(--color-medium-grey);
+  color: var(--color-off-white);
+  margin: 0 auto;
+  width: 90%;
+  padding: 12px;
+  text-align: center;
+  margin: 30px auto;
+  position: relative;
+  bottom: 20px;
+  border-radius: 5px;
+  margin-top: 14%;
+}
+
+ .pointControlsBox{  
 
     display: flex;
     flex-direction: column;
@@ -68,26 +146,168 @@ font-size: 100%;
 
 }
 
+
+.skipControlBox{
+
+  position: absolute;
+    left: 4%;
+    right: 4%;
+    bottom:30%;
+
+}
 .otherControlsBox{  
     width: 200px;
     margin: 0 auto;
-margin-top: 80px;
 justify-content: space-around;
 
 
 }
 
 
-.volumeControlsBox{
-    position: absolute;
-    left: 50px;
+.seekBarBox{
+  bottom: 16%;
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  margin-bottom: 4%;
+}
 
+.volumeControlsBox{
+  margin-bottom: 50px;
+  position: absolute;
+  left: 2%;
+  right: 2%;
 }
 .pointControlsBox { 
     position: absolute;
     right: 50px;
 
 }
+
+.tracksBoxOverlay{
+
+  background-color: rgba(0,0,0,0.5);
+  position: absolute;
+  left: 0%;
+  right: 0%;
+  top: 0%;
+  bottom: 0%;
+  z-index: 4;
+}
+
+.tracksDivBox:focus{
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  outline: none;
+}
+
+.tracksDivBox{
+  background-color: var(--color-dark-grey);
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  top: 10%;
+  padding-top: 12px;
+  z-index: 4;
+  border-radius: 5px;
+  padding-bottom: 40px;
+}
+
+.tracksDivBox .closeButton{
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 0 2%;
+}
+
+.tracksDivBox h4{
+
+  text-align: left;
+    font-weight: 500;
+    font-family: var(--font-roboto-regular);
+    padding-bottom: 6px;
+}
+hr{
+  position: absolute;
+    left: 5%;
+    right: 5%;
+    height: 2px;
+    background:var(--color-off-white);
+    border: none;
+    margin: 0;
+    z-index: -1;
+    margin-top: 4px
+}
+.speedControlsBox{
+
+  margin-top: 30px;
+  padding: 2%;
+}
+
+.speedControlsBox>div{
+
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+padding: 2%;
+
+}
+
+.speedLevel{
+  width: 4%;
+  font-size: 12px;
+}
+
+.speedInput{
+  border-radius: 100%;
+  height: 10px;
+  width: 10px;
+  background-color: var(--color-off-white);
+  margin: 0 auto;
+  border: 2px transparent;
+}
+.speedInput.selected{
+  height: 18px;
+  width: 18px;
+  background-color: var(--color-netflix-red);
+  border: 2px solid var(--color-dark-grey);
+  box-shadow: 0 0 2px 2px var(--color-netflix-red);
+  z-index: 0;
+  position: relative;
+  bottom: 5px;
+}
+.speedInput2.selected{
+
+}
+.speedInput3.selected{
+
+}
+.speedInput4.selected{
+
+}
+.speedInput1.selected{
+
+}
+.speedInput0.selected{
+
+}
+
+
+.speedLevel p{
+position: relative;
+right: 35%;
+color: var(--color-off-white);
+
+}
+  
+.speedLevel.one p{
+  right: 0%;
+  margin-bottom: 0;
+}
+.speedLevel.one p.normalLabel{
+  right: 90%;
+  margin: 0;
+}  
 
 .playbackSpeedRange{
 

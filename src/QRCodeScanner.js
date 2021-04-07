@@ -134,10 +134,19 @@ class QRCodeScanner extends Component {
                 const scannedResult = jsQR(imageData.data, imageData.width, imageData.height);
                 //console.log(scannedResult);
                 if (scannedResult != null) {
-                    if (scannedResult.data != null && scannedResult.data.match(regexForOTP)) {
-                        console.log("matched");
-                        console.log("Found QR code", scannedResult.data);
-                        this.props.onSuccessfulScan(scannedResult.data);
+                    if (scannedResult.data != null) {
+                        let scannedResultText = scannedResult.data;
+                        let scannedResultArray = scannedResultText.split("=");
+                        if (scannedResultArray.length > 1) {
+                            let scannedResultArrayOtp = scannedResultArray[scannedResultArray.length - 1];
+                            if (scannedResultArrayOtp.match(regexForOTP)) {
+                                console.log("matched");
+                                console.log("Found QR code", scannedResultArrayOtp);
+                                this.props.onSuccessfulScan(scannedResultArrayOtp);
+
+                            }
+
+                        }
                     }
                 }
             }

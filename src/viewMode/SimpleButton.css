@@ -1,46 +1,77 @@
 .simpleButton {
     padding: 2%;
+    display: inline-block;
 }
-span{
+.simpleButton span{
     padding: 4%;
-    color : #fff;
+    color : var(--color-off-white);
 }
 
 .scan{
     
 }
 
-.playDiv{ 
+.bottomBox > div{
+    width: 18%;
+  }
 
-    border : none;
-    border : 2px solid #222;
-    border-radius: 100%;
-    background: #222;
-    color: #b5b5b5;
-    width: 50px;
-    height: 50px;
-    line-height: 3.2;
-    margin-top: 75px;
+.playDiv{
+    position: relative;
+    top: 15px;
 }
 
 .skipIntroDiv{ 
-    border : 2px solid #fff;
-    background: none;
-    width: 40px;
+
+
+    width: 80px;
     border-radius: 5px;
     background: #222;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: var(--font-roboto-regular);
+    padding: 8px;
+    border: none;
+    background: var(--color-off-white);
+    color: var(--color-off-black);
+    float: right;
 }
 
-.nextEpisodeDiv{ 
-    border : none;
-    border : 2px solid #222;
-    border-radius: 100%;
-    width: 20px;
-    height: 20px;
-    background: #222;
+
+
+.skipIntroDiv.buttonDisabled{
+
+    background : var(--color-dark-grey);
+    color : #828282;
+    
 }
 
-
+.skipIntroDiv span{
+    padding: 4%;
+    color: var(--color-off-black);
+}
 .closeButton { 
     color :  #e50914;
+}
+
+img {
+    width: 40px;
+}
+
+.playDiv img{
+    width: 60px;
+    position: relative;
+    top: -24px;
+}
+
+.helpDiv{
+    float: left;
+}
+
+.smackTVDiv, .closeDiv{
+    float: right;
+}
+
+.muteToggleDiv{
+    padding: 2% 0%;
+
 }

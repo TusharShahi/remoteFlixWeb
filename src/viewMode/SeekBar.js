@@ -6,6 +6,9 @@ class SeekBar extends React.Component {
     onplayhead = false;
     lockTimeLine = false;
     previousValue = null;
+
+    clickPercentValue = null;
+    mouseUpValueToUse = null;
     constructor(props) {
         super(props);
         this.state = {
@@ -13,20 +16,23 @@ class SeekBar extends React.Component {
             currentTime: this.props.currentTime,
             socket: this.props.socket
         };
+
+        this.timelineRef = React.createRef();
+        this.playheadRef = React.createRef();
+        this.timelineProgressRef = React.createRef();
+
         this.clickPercent = this.clickPercent.bind(this);
         this.timelineClick = this.timelineClick.bind(this);
         this.playheadMouseDown = this.playheadMouseDown.bind(this);
+        this.playheadMouseUp = this.playheadMouseUp.bind(this);
         this.moveplayhead = this.moveplayhead.bind(this);
         //this.mouseUpSeekbar = this.mouseUpSeekbar.bind(this);
         this.formatTime = this.formatTime.bind(this);
         this.mouseMoveEventHandler = this.mouseMoveEventHandler.bind(this);
         this.mouseUpEventHandler = this.mouseUpEventHandler.bind(this);
-        this.party = this.party.bind(this);
+
     }
 
-    party() {
-        console.log('xxxaaax');
-    }
 
     componentDidUpdate(prevProps) {
         if (prevProps.duration !== this.props.duration) {
@@ -37,18 +43,17 @@ class SeekBar extends React.Component {
 
         }
         if (prevProps.currentTime !== this.props.currentTime) {
-            console.log(this.lockTimeLine);
+            //console.log(this.lockTimeLine);
 
 
             this.setState({
                 currentTime: this.props.currentTime
             });
             //console.log("changing");
-            let playhead = document.getElementById('playhead'); // playhead
-            let timeline = document.getElementById('timeline'); // timeline
+
 
             // timeline width adjusted for playhead    
-            let timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
+            let timelineWidth = this.timelineRef.current.offsetWidth;
 
             let playPercent = timelineWidth * (this.state.currentTime / this.state.duration);
             //console.log(playPercent);
@@ -58,7 +63,9 @@ class SeekBar extends React.Component {
             }
             else {
                 //console.log(playPercent);
-                playhead.style.marginLeft = playPercent + "px";
+                this.playheadRef.current.style.marginLeft = playPercent + "px";
+                this.timelineProgressRef.current.style.width = `${playPercent + 2}px`;
+                //  console.log("done");
             }
 
 
@@ -74,29 +81,28 @@ class SeekBar extends React.Component {
     }
 
     clickPercent(event) {
-        let playhead = document.getElementById('playhead');
-        let timeline = document.getElementById('timeline');
-        let timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
+
+        let timelineWidth = this.timelineRef.current.offsetWidth - this.playheadRef.current.offsetWidth;
         let valueToReturn = 0;
         if (event.touches != null && event.touches.length > 0) {
-            valueToReturn = (event.touches[0].pageX - timeline.getBoundingClientRect().left) / timelineWidth;
+            valueToReturn = (event.touches[0].pageX - this.timelineRef.current.getBoundingClientRect().left) / timelineWidth;
 
         }
         else {
-            valueToReturn = (event.clientX - timeline.getBoundingClientRect().left) / timelineWidth;
+            valueToReturn = (event.clientX - this.timelineRef.current.getBoundingClientRect().left) / timelineWidth;
         }
         return valueToReturn;
     }
 
     timelineClick(event) {
         //alert("xaxax");
-        console.log("xanax");
+        console.log("timeline click called");
         this.moveplayhead(event);
         //Emit current time 
         let currentTime = this.state.duration * this.clickPercent(event);
+        console.log(currentTime);
 
-        let playhead = document.getElementById('playhead'); // playhead
-        let playHeadMarginLeft = playhead.style.marginLeft;
+        let playHeadMarginLeft = this.playheadRef.current.style.marginLeft;
         this.previousValue = parseFloat(playHeadMarginLeft.split('p')[0]);
 
         this.convertChangeToKeyPress(currentTime, true);
@@ -110,29 +116,43 @@ class SeekBar extends React.Component {
 
         console.log("xxx");
         this.onplayhead = true;
-        let playhead = document.getElementById('playhead'); // playhead
-        let timeline = document.getElementById('timeline'); // timeline
-        let timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
+
+        // let timelineWidth = this.timelineRef.current.offsetWidth - this.playheadRef.current.offsetWidth;
         //console.log('tlw ' + timelineWidth);
         //console.log('tlw clientx ' + event.clientX);
-        let newMargLeft = 0;
-        if (event.touches != null && event.touches.length > 0) {
-            newMargLeft = event.touches[0].pageX - timeline.getBoundingClientRect().left;
+        // let newMargLeft = 0;
+        // if (event.touches != null && event.touches.length > 0) {
+        //   newMargLeft = event.touches[0].pageX - this.timelineRef.current.getBoundingClientRect().left;
 
-        }
-        else {
-            newMargLeft = event.clientX - timeline.getBoundingClientRect().left;
-        }
+        //      }
+        //        else {
+        // newMargLeft = event.clientX - this.timelineRef.current.getBoundingClientRect().left;
+        //    }
 
-        console.log(newMargLeft);
+        //console.log(newMargLeft);
 
         this.moveplayhead(event);
 
-        let currentTime = (newMargLeft) / timelineWidth;
+        //let currentTime = (newMargLeft) / timelineWidth;
 
         //Emit current time 
-        this.convertChangeToKeyPress(currentTime, false);
+        // this.convertChangeToKeyPress(currentTime, false);
     }
+
+    playheadMouseUp(event) {
+        console.log("mouse up");
+        if (this.clickPercentValue != null) {
+
+            let currentTime = this.state.duration * this.clickPercentValue;
+            console.log("current Time is " + currentTime);
+
+            //let playHeadMarginLeft = this.playheadRef.current.style.marginLeft;
+            //this.previousValue = parseFloat(playHeadMarginLeft.split('p')[0]);
+            this.convertChangeToKeyPress(currentTime, true);
+
+        }
+    }
+
 
     mouseMoveEventHandler(event) {
         if (this.onplayhead) {
@@ -143,54 +163,72 @@ class SeekBar extends React.Component {
 
     mouseUpEventHandler(event) {
         if (this.onplayhead) {
-            console.log("mouse up onplayhead");
+            console.log("mouse up event handler");
             window.removeEventListener('mousemove', this.mouseMoveEventHandler);
         }
 
     }
 
     moveplayhead(event) {
+        console.log("move playhead called");
         this.lockTimeLine = true;
         setTimeout(() => {
             this.lockTimeLine = false;
-        }, 2000);
-        //window.alert("yeah");
-        let playhead = document.getElementById('playhead'); // playhead
-        let timeline = document.getElementById('timeline'); // timeline
-        if (timeline != null && playhead != null) {
-            console.log("xaxaxaxaa");
-            let timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
+        }, 3000);
+
+
+
+        if (this.timelineRef.current != null && this.playheadRef.current != null) {
+
+            let timelineWidth = this.timelineRef.current.offsetWidth - this.playheadRef.current.offsetWidth;
 
             let newMargLeft = 0;
             console.log('-----');
             if (event.touches != null && event.touches.length > 0) {
-                console.log("touches");
-                console.log(event.touches);
-                newMargLeft = event.touches[0].pageX - timeline.getBoundingClientRect().left;
+
+                newMargLeft = event.touches[0].pageX - this.timelineRef.current.getBoundingClientRect().left;
             }
             else {
-                newMargLeft = event.clientX - timeline.getBoundingClientRect().left;
+                newMargLeft = event.clientX - this.timelineRef.current.getBoundingClientRect().left;
             }
+
+            this.clickPercentValue = newMargLeft;
 
             if (newMargLeft >= 0 && newMargLeft <= timelineWidth) {
-                playhead.style.marginLeft = newMargLeft + "px";
+                this.playheadRef.current.style.marginLeft = newMargLeft + "px";
+                this.timelineProgressRef.current.style.width = `${newMargLeft}px`;
+
             }
             if (newMargLeft < 0) {
-                playhead.style.marginLeft = "0px";
+                this.playheadRef.current.style.marginLeft = "0px";
+                this.timelineProgressRef.current.style.width = "0%";
+
             }
             if (newMargLeft > timelineWidth) {
-                playhead.style.marginLeft = timelineWidth + "px";
+                this.playheadRef.current.style.marginLeft = timelineWidth + "px";
+                this.timelineProgressRef.current.style.width = "100%";
+
             }
 
+            let valueToReturn = 0;
+            if (event.touches != null && event.touches.length > 0) {
+                valueToReturn = (event.touches[0].pageX - this.timelineRef.current.getBoundingClientRect().left) / timelineWidth;
+            }
+            else {
+                valueToReturn = (event.clientX - this.timelineRef.current.getBoundingClientRect().left) / timelineWidth;
+            }
+            console.log(valueToReturn);
+            this.clickPercentValue = valueToReturn;
 
         }
     }
 
     mouseUpSeekbar(event) {
+        console.log("mouse up seekar called");
         if (this.onplayhead == true) {
             this.moveplayhead(event);
-            let playhead = document.getElementById('playhead'); // playhead
-            let playHeadMarginLeft = playhead.style.marginLeft;
+
+            let playHeadMarginLeft = this.playheadRef.current.style.marginLeft;
             this.previousValue = parseFloat(playHeadMarginLeft.split('p')[0]);
             //window.removeEventListener('mousemove', Lethis.moveplayhead, true);
             //let currentTime = this.duration * this.clickPercent(event);
@@ -247,14 +285,26 @@ class SeekBar extends React.Component {
 
 
         let formattedTime = this.formatTime(this.state.duration - this.state.currentTime);
+        let elapsedTime = this.formatTime(this.state.currentTime);
 
         return (
-            <div id="audioplayer">
-                <div id="timeline" onClick={this.timelineClick} onMouseDown={this.party}>
-                    <scan id="playhead" tabindex="0"
-                        onMouseDown={this.playheadMouseDown}></scan>
+            <div id="seekBar">
+
+                <div id="timeline" ref={this.timelineRef} onClick={this.timelineClick} onMouseDown={this.party}>
+
+                    <div className="timelineProgress" ref={this.timelineProgressRef}>
+
+                    </div>
+                    <scan id="playhead" tabindex="0" ref={this.playheadRef}
+                        onMouseDown={this.playheadMouseDown} onMouseUp={this.playheadMouseUp}
+                        onTouchStart={this.playheadMouseDown} onTouchEnd={this.playheadMouseUp}
+
+                    ></scan>
                 </div>
-                <span>
+                <span className='elapsedTime'>
+                    {elapsedTime}
+                </span>
+                <span className='remainingTime'>
                     {formattedTime}
                 </span>
             </div>

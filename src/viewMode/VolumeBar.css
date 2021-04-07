@@ -1,31 +1,26 @@
-#seekBar{
+#audioplayer{
 
-	height: 60px;
-	margin: 30px auto auto auto;
+	margin: 16px auto auto auto;
   border: solid;
+  margin: 12px 0 0 0;
+    width: 100%;
+    padding: 0;
 
 }
 
-#seekBar span{
+#audioplayer span{
 	padding: 0;
 	margin-top: 8pt;
-	color: var(--color-off-white);
-    font-size: 16px;
-    font-family: var(--font-roboto-medium);
 
 }
-#seekBar .remainingTime{
+.remainingTime{
 	float: right;
-	position: relative;
-	right: 8px;
 }
-#seekBar .elapsedTime{
+.elapsedTime{
 	float: left;
-	position: relative;
-	left: 8px;
 }
 
-#seekBar #pButton{
+#pButton{
     height:60px; 
     width: 60px;
     border: none;
@@ -36,9 +31,9 @@
     outline:none;
 }
 
-#seekBar #timeline{
+#timeline{
 	display: inline-block;
-	width: 95%;
+	width: 96%;
 	height: 6px;
 	border : 0;
 	padding: 0;
@@ -46,24 +41,39 @@
 	background-color: var(--color-medium-grey);
 }
 
-#seekBar .timelineProgress{
-	display: inline-block;
+#audioplayer #timeline{
+	position: relative;
+	
+}
+.timelineProgress{
+
 	position: absolute;
-	left: 3%;
+
 	height: 6px;
 	border : 0;
 	padding: 0;
 	margin: 0 auto;
-	background-color: var(--color-netflix-red);
+	background-color: var(--color-off-white);
 }
 
-#seekBar #playhead{
+.volumeMeter{
+	display: inline-block;
+	position: absolute;
+	left: 5%;
+	height: 6px;
+	border : 0;
+	padding: 0;
+	margin: 0 auto;
+	background-color: var(--color-off-white);
+}
+
+#volumehead{
 	padding : 0;
 	height:20px; 
     width: 20px;
 	display: block;
 	border-radius: 50%;
-	background-color: var(--color-netflix-red);	
+	background-color: var(--color-off-white);	
 	position: relative;
 	bottom: 7px;
 	cursor: pointer;

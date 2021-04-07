@@ -66,6 +66,7 @@ class SelectList extends React.Component {
 
   render() {
     let listType = '';
+
     if (this.props.name == 'subs') {
       listType = 'Subtitles';
     }
@@ -73,7 +74,6 @@ class SelectList extends React.Component {
       listType = 'Audio';
     }
     else if (this.props.name == 'episodes') {
-      listType = 'Episodes';
     }
 
 
