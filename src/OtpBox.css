@@ -4,10 +4,11 @@
 div{
 
     text-align: center;
-    padding : 5% 2% 2% 2%;
+    /*padding : 5% 2% 2% 2%;*/
 }
 
-div h1{
+div h1.appHeading{
+    font-size: 40px;
     text-transform: uppercase;
     font-family : 'Raleway';
     font-weight: 900;
@@ -24,16 +25,19 @@ input{
 }
 
 label{
-color : #fff;
+    color : var(--color-off-white);
 }
 
 
 input[type="text"]{
     border : none;
-    border-bottom : 2px solid  #e50914;
+    border-bottom : 2px solid var(--color-netflix-red);
     background : none;
     width: 60%;
-    color : #fff;
+    color : var(--color-off-white);
+    outline:none;
+    -webkit-appearance: none;
+
 }
 
 
@@ -42,7 +46,7 @@ input[type="text"]{
 input[type="text"]:focus{
     background : #353B45;
     border : none;
-    border-bottom : 2px solid  #e50914;
+    border-bottom : 2px solid var(--color-netflix-red);
 
 }
 
@@ -50,12 +54,15 @@ input[type="text"]:focus{
 
 input[type="submit"]{
     padding: 5%;
-    background :  #e50914;
     border : none;
     width: 60%;
-    color : #fff;
+    color :var(--color-off-white);
     text-transform: uppercase;
     font-weight: 900;
+    background : var(--color-netflix-red);
+    outline:none;
+    -webkit-appearance: none;
+
 }
 
 
@@ -68,9 +75,16 @@ input[type="submit"]:focus{
 
 h1{
     font-family : 'Poppins';
-    color :  #e50914;
-}
+    color : var(--color-netflix-red);}
 
 @font-face {
     font-family: 'MyFont';
+  }
+
+  p{
+      color : var(--color-netflix-red);
+  }
+
+  .forceLoginButton {
+    color: var(--color-off-white);
   }

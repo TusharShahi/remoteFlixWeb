@@ -1,0 +1,61 @@
+.troubleShootBox{
+    background: var(--color-off-black);
+    z-index: 8;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: auto;
+    max-height: 900px;
+    padding: 2%;
+    color: var(--color-off-white);
+    padding-top: 5%;
+}
+
+.troubleShootBox .closeButton{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 0 10px;
+}
+.troubleShootBox .closeButton img{
+    width: 10%;
+
+}
+
+.troubleShootBox h1{
+    font-size: 36px;
+    color: var(--color-off-white);
+    margin-top: 0%;
+    font-family: var(--font-rooto--font-roboto-)
+}
+
+.troubleShootBox h2{
+    font-size: 18px;
+    color: var(--color-off-white);
+}
+.troubleShootBox .content{
+    padding: 20px;
+}
+.troubleShootBox .pointers{
+    margin: 20px auto;
+    text-align: left;
+}
+
+.troubleShootBox .pointerBullet{
+    display: inline;
+    margin-right: 5px;
+
+}
+.troubleShootBox p{
+    text-align: left; 
+    display: inline;
+     color: var(--color-off-white);
+}
+
+.troubleShootBox .content>div>div{
+
+}
+
+.troubleShootBox .icon{
+    background: var(--color-medium-grey);
+}

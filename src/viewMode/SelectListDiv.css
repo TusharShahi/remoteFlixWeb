@@ -1,0 +1,195 @@
+
+.SelectList.episodes .ListTitle{
+
+    justify-content: center;
+    width: 90%;
+    padding-left: 12.5px;
+}
+
+
+.episodeNumber{
+    margin-top: 6px;
+    border: 1px solid #fff;
+    height: 22px;
+    margin-right: 8px;
+    line-height: 22px;
+    padding: 0px 2px;
+    font-weight: 500;
+    text-align: center;
+    border-radius: 2px;
+
+}
+
+.ListTitle{
+    
+    display : flex;
+    width: 75%;
+    margin : 0 auto;
+    font-size: 14px;
+    color : var(--color-off-white);
+    font-family: var(--font-roboto-regular);
+}
+
+.ListTitle>div{
+    display: flex;
+}
+
+.ListTitle>div>div{
+width: 60%;
+}
+.ListTitle p {
+    font-weight: 400;
+    margin-top: 10px;
+    color : var(--color-off-white);
+    font-size: 14px;
+
+
+    display: inline-block;
+    width: 90%;
+
+    
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+}
+
+
+.episodes .ListTitle p{
+    width: auto;
+}
+.episodes .ListTitle div{
+    width: auto;
+    max-width: 80%;
+}
+
+.ListTitle img{
+    width: 30px;
+    position: relative;
+    top: -2px;
+}
+.SelectList{
+    padding: 2%;
+    text-overflow: ellipsis
+}
+.SelectList.audio,.SelectList.subs{
+    margin-top: 30px;
+}
+
+.SelectList .audio,.SelectList .subs{
+    font-size: 16px;
+    font-family: var(--font-roboto-regular);
+    font-weight: 500;
+    background-color: var(--color-medium-grey);
+    color: var(--color-off-white);
+    margin: 0 auto;
+    width: 90%;
+    padding: 0px 12px;
+    border-radius: 5px;
+}
+.SelectList .audio>.ListTitle,.SelectList .subs>.ListTitle{
+width: auto;
+}
+.SelectList .audio>.ListTitle>div,.SelectList .subs>.ListTitle>div{
+    position: relative;
+    width: 100%;
+
+}
+.SelectList .audio img,.SelectList .subs img{
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    
+}
+
+.SelectList .audio>.ListTitle p,.SelectList .subs>.ListTitle p{
+    text-align: left;
+    margin-top: 14px;
+}
+
+
+.subs h4,.audio h4{
+    padding-bottom: 12px;
+}
+
+.SelectList>div:focus{
+    outline : none;
+}
+
+h4{
+    margin : 2%;
+    color: #fff;
+
+}
+
+.listDiv{ 
+    display: none;
+    left: 12px;
+    right: 12px;
+}
+
+.listDiv.subtitles,.listDiv.audios{
+    /* width: 100%; */
+    left: 12px;
+    right: 12px;
+
+}
+
+.listDiv div{ 
+
+ 
+}
+
+
+
+
+
+.listDiv{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 18px;
+    padding: 8px 0px;
+    background-color: var(--color-medium-grey);
+    height: 260px;
+    overflow: auto;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    z-index: 6;
+    
+}
+
+.listItem{
+    background-color: var(--color-medium-grey);
+    color : var(--color-off-white);
+    padding: 14px 16px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+.selected{
+    background-color: var(--color-light-grey);
+    color : var(--color-off-white);
+}
+.showList{
+    display: block;
+}
+.hideList{
+    display: none;
+}
+.trackNumber{ 
+    font-family: var(--font-roboto-medium);
+    font-size: 20px;
+    font-weight: 500;
+}
+.trackTitle{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--font-roboto-regular);
+    font-size: 18px;
+    padding-left: 8pt;
+}

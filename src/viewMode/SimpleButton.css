@@ -1,4 +1,77 @@
-span{
+.simpleButton {
+    padding: 2%;
+    display: inline-block;
+}
+.simpleButton span{
+    padding: 4%;
+    color : var(--color-off-white);
+}
 
-    color : #fff;
+.scan{
+    
+}
+
+.bottomBox > div{
+    width: 18%;
+  }
+
+.playDiv{
+    position: relative;
+    top: 15px;
+}
+
+.skipIntroDiv{ 
+
+
+    width: 80px;
+    border-radius: 5px;
+    background: #222;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: var(--font-roboto-regular);
+    padding: 8px;
+    border: none;
+    background: var(--color-off-white);
+    color: var(--color-off-black);
+    float: right;
+}
+
+
+
+.skipIntroDiv.buttonDisabled{
+
+    background : var(--color-dark-grey);
+    color : #828282;
+    
+}
+
+.skipIntroDiv span{
+    padding: 4%;
+    color: var(--color-off-black);
+}
+.closeButton { 
+    color :  #e50914;
+}
+
+img {
+    width: 40px;
+}
+
+.playDiv img{
+    width: 60px;
+    position: relative;
+    top: -24px;
+}
+
+.helpDiv{
+    float: left;
+}
+
+.smackTVDiv, .closeDiv{
+    float: right;
+}
+
+.muteToggleDiv{
+    padding: 2% 0%;
+
 }

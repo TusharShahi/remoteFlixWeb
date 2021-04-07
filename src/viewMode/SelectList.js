@@ -12,14 +12,24 @@ class SelectList extends React.Component {
     };
     this.getList = this.getList.bind(this);
     this.handleChange = this.handleChange.bind(this);
+
+
   }
 
   getList() {
     let items = [];
+    //console.log('selected value is ' + this.props.selectedValue);
 
     if (this.props.inputs != null) {
       for (let i = 0; i < this.props.inputs.length; i++) {
-        items.push(<option key={this.props.inputs[i]} value={this.props.inputs[i]}>{this.props.inputs[i]}</option>);
+        if (this.props.selectedValue == this.props.inputs[i]) {
+          //console.log('it is true for ' + i);
+          items.push(<option key={this.props.inputs[i]} value={this.props.inputs[i]}>{this.props.inputs[i]}</option>);
+        }
+        else {
+          items.push(<option key={this.props.inputs[i]} value={this.props.inputs[i]}>{this.props.inputs[i]}</option>);
+
+        }
       }
     }
     return items;
@@ -45,6 +55,7 @@ class SelectList extends React.Component {
     if (emitEvent != '') {
       //console.og('there has been a change');
       this.props.socket.emit(emitEvent, selectedData);
+      this.props.onChangeSelection(event.target.value, this.props.name);
       this.setState({ value: event.target.value });
     }
   }
@@ -55,6 +66,7 @@ class SelectList extends React.Component {
 
   render() {
     let listType = '';
+
     if (this.props.name == 'subs') {
       listType = 'Subtitles';
     }
@@ -62,14 +74,13 @@ class SelectList extends React.Component {
       listType = 'Audio';
     }
     else if (this.props.name == 'episodes') {
-      listType = 'Episodes';
     }
 
 
     return (
       <div className='SelectList'>
         <h4>{listType}</h4>
-        <select value={this.state.value} onChange={this.handleChange} className={this.props.name}>
+        <select onChange={this.handleChange} className={this.props.name} value={this.props.selectedValue}>
           {this.getList()}
         </select>
       </div>

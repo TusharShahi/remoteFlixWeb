@@ -1,0 +1,88 @@
+#seekBar{
+
+	height: 60px;
+	margin: 30px auto auto auto;
+  border: solid;
+
+}
+
+.timeStamp{
+	padding: 0;
+	margin-top: 8pt;
+	color: var(--color-off-white);
+    font-size: 16px;
+    font-family: var(--font-roboto-medium);
+}
+.timeStamp.remainingTime{
+	float: right;
+	position: relative;
+	right: 8px;
+}
+.timeStamp.elapsedTime{
+	float: left;
+	position: relative;
+	left: 8px;
+}
+
+#seekBar #pButton{
+    height:60px; 
+    width: 60px;
+    border: none;
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    float:left;
+    outline:none;
+}
+
+#seekBar #timeline{
+
+}
+
+#seekBar .timelineProgress{
+	display: inline-block;
+	position: absolute;
+	left: 3%;
+	height: 6px;
+	border : 0;
+	padding: 0;
+	margin: 0 auto;
+	background-color: var(--color-netflix-red);
+}
+
+#seekBar #playhead{
+	padding : 0;
+	height:20px; 
+    width: 20px;
+	display: block;
+	border-radius: 50%;
+	background-color: var(--color-netflix-red);	
+	position: relative;
+	bottom: 7px;
+	cursor: pointer;
+	
+}
+
+
+.seekBarBox .css-yibitn-Slider {
+
+	height: 6px;
+	width: 92%;
+	border : 0;
+	padding: 0;
+	border-radius: 0;
+	margin: 0 auto;
+	background-color: var(--color-medium-grey);
+}
+
+.seekBarBox .css-zdtx1u-Slider{
+	padding : 0;
+	height:20px; 
+    width: 20px;
+	display: block;
+	border-radius: 50%;
+	background-color: var(--color-netflix-red);	
+	position: relative;
+
+	cursor: pointer;
+}

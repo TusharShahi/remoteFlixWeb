@@ -7,6 +7,58 @@
   pointer-events: none;
 }
 
+.appBox{
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.helpBox{
+  margin: 0;
+  padding: 0;  
+}
+
+.helpBoxClosed{
+ 
+}
+
+#helpBoxMain{
+  padding: 50% 0%;
+  margin: 0 auto;
+  background-color: #000;
+}
+
+.showHelpImage{
+  width: 90%;
+  margin: 20px auto;
+}
+
+.dontShowHelpImage{ 
+  height: 0;
+  width: 0;
+}
+
+.remoteGuideBox{  
+  z-index: 2;
+  position : relative;
+  margin-top: 20px;
+}
+
+.remoteGuideBox span{
+  border-radius: 100%;
+  border: 2px solid #fff;
+  display: block;
+    width: 20px;
+    margin: 0 auto;
+}
+
+.removeBorder{ 
+  border : 0px !important;
+  width: 50px !important;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -35,4 +87,49 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.recentOTPBox h3{
+  color: #fff;
+}
+.recentOTPButton {
+  margin: 5px auto;
+  width: 18%;
+  padding: 4px; 
+  color : #fff;
+  background :  #e50914;
+  font-size: 90%;
+  font-weight: 600;
+  margin-left: 5px;
+}
+.recentOTPButton:hover{
+  background: #8a0e14;
+}
+
+.helpBox{
+  position: absolute;
+  top: 0;
+  right: 0
+
+}
+
+.retryWithBox{
+  display: flex;
+  width: 60%;
+  justify-content: center;
+  margin: 10px auto;
+  text-align: center;
+}
+.recentOTPBox span{
+  color: var(--color-off-white);
+  margin-right: 5px;
+}
+.retryWithBox div{
+  display: inline-block;
+  width: 40%;
+}
+.retrywithText{
+  color: var(--color-off-white);
+  display: inline-block;
+  width: 60%;
 }

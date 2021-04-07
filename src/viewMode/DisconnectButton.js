@@ -8,7 +8,7 @@ class DisconnectButton extends React.Component {
 
 
   closeConnection() {
-    //  console.log("close is called");
+    //  //console.log("close is called");
     this.props.socket.emit('disconnect', { from: 'user' });
   }
 

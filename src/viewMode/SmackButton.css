@@ -1,10 +1,7 @@
+.smackButton{padding: 2%;}
 .smackButton span{
     color : #fff;
-    background :  #e50914;
+
     padding: 2%;
 }
 
-
-.smackButton span:hover{
-    background :  #8c0c13;
-}
