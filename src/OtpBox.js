@@ -7,9 +7,9 @@ class OtpBox extends React.Component {
     super(props);
     this.state = {
       otpValue: null,
-      connectionError: '',
+      connectionError: "",
       showForceLogin: false
-    }
+    };
 
     this.errorStatement = React.createRef();
 
@@ -32,20 +32,18 @@ class OtpBox extends React.Component {
     //   this.textInput.current.focus();
   }
 
-
   handleSubmit(event) {
-    console.log('on submit clicked');
+    console.log("on submit clicked");
     event.preventDefault();
     this.props.submitMethod(this.state.otpValue);
-
   }
 
   componentDidUpdate(prevProps) {
-    console.log('component did update');
+    console.log("component did update");
     console.log(prevProps.showConnectionError);
     console.log(this.props.showConnectionError);
     if (prevProps.showConnectionError !== this.props.showConnectionError) {
-      console.log('change');
+      console.log("change");
       let displayForceLogin = false;
       if (this.props.showConnectionError == "One phone is already connected.") {
         displayForceLogin = true;
@@ -72,35 +70,48 @@ class OtpBox extends React.Component {
   }
 
   render() {
-    console.log('renderedd');
+    //console.log('renderedd');
 
-    let alertText = <p ref={this.errorStatement}>{this.state.connectionError}</p>;
+    let alertText = (
+      <p ref={this.errorStatement}>{this.state.connectionError}</p>
+    );
     //let forceLogin = null;
     if (this.state.showForceLogin) {
-      console.log('asdsd');
-      alertText = <p ref={this.errorStatement}>One phone is already connected.
-        <span role="button" className="forceLoginButton" onClick={this.forceLoginFunction}>Force Login?</span>
-      </p>
+      console.log("asdsd");
+      alertText = (
+        <p ref={this.errorStatement}>
+          One phone is already connected.
+          <span
+            role="button"
+            className="forceLoginButton"
+            onClick={this.forceLoginFunction}
+          >
+            Force Login?
+          </span>
+        </p>
+      );
     }
     return (
-
       <div>
-        <h1 className='appHeading'>FlixRemote</h1>
+        <h1 className="appHeading">FlixRemote</h1>
         <div>
           <QRCodeScanner onSuccessfulScan={this.sendScannedOTP}></QRCodeScanner>
-
         </div>
         <div>
           <form onSubmit={this.handleSubmit}>
             <label htmlFor="inputOtp">Enter 6 Digit Passcode</label>
             <input
-              type="text" pattern="[0-9]{6}" id="inputOtp"
+              type="text"
+              pattern="[0-9]{6}"
+              id="inputOtp"
               inputmode="numeric"
-              onChange={this.handleChange} maxLength="6"
+              onChange={this.handleChange}
+              maxLength="6"
               oninvalid="this.setCustomValidity('Enter 6 Digit Passcode')"
               oninput="this.setCustomValidity('')"
               /*placeholder="Please enter passcode"*/
-              autoComplete="off" required
+              autoComplete="off"
+              required
             />
             <input type="submit" value="Submit"></input>
           </form>
