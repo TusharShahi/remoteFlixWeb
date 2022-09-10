@@ -1,7 +1,6 @@
 import React from "react";
 import { Socket } from "socket.io-client";
 
-
 import "./SelectList.css";
 class SelectList extends React.Component {
   constructor(props) {
@@ -12,8 +11,6 @@ class SelectList extends React.Component {
     };
     this.getList = this.getList.bind(this);
     this.handleChange = this.handleChange.bind(this);
-
-
   }
 
   getList() {
@@ -24,11 +21,17 @@ class SelectList extends React.Component {
       for (let i = 0; i < this.props.inputs.length; i++) {
         if (this.props.selectedValue == this.props.inputs[i]) {
           //console.log('it is true for ' + i);
-          items.push(<option key={this.props.inputs[i]} value={this.props.inputs[i]}>{this.props.inputs[i]}</option>);
-        }
-        else {
-          items.push(<option key={this.props.inputs[i]} value={this.props.inputs[i]}>{this.props.inputs[i]}</option>);
-
+          items.push(
+            <option key={this.props.inputs[i]} value={this.props.inputs[i]}>
+              {this.props.inputs[i]}
+            </option>
+          );
+        } else {
+          items.push(
+            <option key={this.props.inputs[i]} value={this.props.inputs[i]}>
+              {this.props.inputs[i]}
+            </option>
+          );
         }
       }
     }
@@ -37,22 +40,20 @@ class SelectList extends React.Component {
 
   handleChange(event) {
     //console.og('called');
-    let emitEvent = '';
+    let emitEvent = "";
     let selectedData = null;
-    if (this.props.name == 'subs') {
-      emitEvent = 'changeSubs'
+    if (this.props.name == "subs") {
+      emitEvent = "changeSubs";
+      selectedData = event.target.value;
+    } else if (this.props.name == "episodes") {
+      emitEvent = "changeEpisodes";
+      selectedData =
+        document.getElementsByClassName("episodes")[0].selectedIndex;
+    } else if (this.props.name == "audio") {
+      emitEvent = "changeAudios";
       selectedData = event.target.value;
     }
-    else if (this.props.name == 'episodes') {
-      emitEvent = 'changeEpisodes'
-      selectedData = document.getElementsByClassName('episodes')[0].selectedIndex;
-
-    }
-    else if (this.props.name == 'audio') {
-      emitEvent = 'changeAudios'
-      selectedData = event.target.value;
-    }
-    if (emitEvent != '') {
+    if (emitEvent != "") {
       //console.og('there has been a change');
       this.props.socket.emit(emitEvent, selectedData);
       this.props.onChangeSelection(event.target.value, this.props.name);
@@ -65,22 +66,23 @@ class SelectList extends React.Component {
   }
 
   render() {
-    let listType = '';
+    let listType = "";
 
-    if (this.props.name == 'subs') {
-      listType = 'Subtitles';
+    if (this.props.name == "subs") {
+      listType = "Subtitles";
+    } else if (this.props.name == "audio") {
+      listType = "Audio";
+    } else if (this.props.name == "episodes") {
     }
-    else if (this.props.name == 'audio') {
-      listType = 'Audio';
-    }
-    else if (this.props.name == 'episodes') {
-    }
-
 
     return (
-      <div className='SelectList'>
+      <div className="SelectList">
         <h4>{listType}</h4>
-        <select onChange={this.handleChange} className={this.props.name} value={this.props.selectedValue}>
+        <select
+          onChange={this.handleChange}
+          className={this.props.name}
+          value={this.props.selectedValue}
+        >
           {this.getList()}
         </select>
       </div>

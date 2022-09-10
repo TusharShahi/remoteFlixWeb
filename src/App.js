@@ -1,14 +1,13 @@
 import React from "react";
 
-import queryString from 'query-string';
+import queryString from "query-string";
 
 import socketIOClient from "socket.io-client";
-import OtpBox from "./OtpBox"
+import OtpBox from "./OtpBox";
 import NetflixWatch from "./viewMode/NetflixWatch";
 import NetflixPremier from "./viewMode/NetflixPremier";
 import HelpBox from "./HelpBox";
 import { Route, Switch } from "react-router-dom";
-
 
 import "./App.css";
 
@@ -16,10 +15,7 @@ import "./App.css";
 
 const PORT = "8080";
 
-
 class App extends React.Component {
-
-
   progressLock = false;
   closed = false;
 
@@ -28,16 +24,15 @@ class App extends React.Component {
     ////console.log('constructor is called');
 
     this.state = {
-
-      selectedEpisode: '',
-      selectedAudio: '',
-      selectedSubtitle: '',
-
+      selectedEpisode: "",
+      selectedAudio: "",
+      selectedSubtitle: "",
+      seasonNumber: 0,
       episodes: [],
       subtitleTracks: [],
       audioTracks: [],
       socket: null,
-      mode: 'enter', //enter,view,browse,premier
+      mode: "enter", //enter,view,browse,premier
       service: null,
       selectedEpisodeIndex: -1,
       recentOTPs: [],
@@ -52,7 +47,7 @@ class App extends React.Component {
       paused: false,
       volumeLevel: 1,
 
-      title: 'Sample Title',
+      title: "Sample Title",
       episodeNumber: null,
       episodeTitle: null,
 
@@ -62,7 +57,6 @@ class App extends React.Component {
       browserURL: null,
       loggedIn: false
     };
-
 
     this.submitOtp = this.submitOtp.bind(this);
     this.attachSocketEvents = this.attachSocketEvents.bind(this);
@@ -83,22 +77,17 @@ class App extends React.Component {
   heartBeatFunction() {
     if (this.state.socket != null)
       this.state.socket.emit("heartBeatFromClient");
-
   }
 
   checkForLensRedirect() {
-
     //window.alert(this.props.location.search);
     const parsed = queryString.parse(this.props.location.search);
     if (parsed != null && parsed.otp != null) {
       let otpParam = parsed.otp;
 
-
       if (otpParam.length == 6) {
-
         this.submitOtp(otpParam);
-      }
-      else if (otpParam.indexOf("=") > 0) {
+      } else if (otpParam.indexOf("=") > 0) {
         let otpParamsArray = otpParam.split("=");
         if (otpParamsArray.length > 1) {
           if (otpParamsArray.length == 6) {
@@ -106,16 +95,11 @@ class App extends React.Component {
           }
         }
       }
-
-
     }
   }
   //window.alert(JSON.stringify(parsed));}
 
-
-
   generateOTPsList(recentOTPsMapString, recentOTPsMap) {
-
     let recentOTPsList = [];
     if (recentOTPsMapString != null) {
       recentOTPsMap = JSON.parse(recentOTPsMapString);
@@ -142,28 +126,28 @@ class App extends React.Component {
     }
 
     return recentOTPsList;
-
   }
-
 
   componentDidMount() {
     this.checkForLensRedirect();
 
-
-    let storageDataLoggedIn = localStorage.getItem('loggedIn');
+    let storageDataLoggedIn = localStorage.getItem("loggedIn");
     //console.log(localStorage);
     //console.log("did mount -- " + this.state.loggedIn + " -- " + storageDataLoggedIn);
     //console.log(this.state.lastUsedOtp);
-    let storageDataLastUsedOTP = localStorage.getItem('lastUsedOTP');
+    let storageDataLastUsedOTP = localStorage.getItem("lastUsedOTP");
     //console.log(storageDataLastUsedOTP);
-    if (storageDataLoggedIn != null && storageDataLoggedIn != 'false') {
+    if (storageDataLoggedIn != null && storageDataLoggedIn != "false") {
       this.submitOtp(storageDataLastUsedOTP);
     }
 
-    let recentOTPsMapString = localStorage.getItem('recentOTPsMap');
+    let recentOTPsMapString = localStorage.getItem("recentOTPsMap");
     let recentOTPsMap = new Map();
 
-    let recentOTPsList = this.generateOTPsList(recentOTPsMapString, recentOTPsMap);
+    let recentOTPsList = this.generateOTPsList(
+      recentOTPsMapString,
+      recentOTPsMap
+    );
 
     this.setState({
       recentOTPs: recentOTPsList
@@ -171,30 +155,27 @@ class App extends React.Component {
 
     if (this.state.socket != null) {
       this.attachSocketEvents();
-    }
-    else {
+    } else {
     }
   }
-  componentDidUpdate() {
-
-  }
-
+  componentDidUpdate() {}
 
   goToLandingPage() {
     //console.log('go to landing page');
-    let recentOTPsMapString = localStorage.getItem('recentOTPsMap');
+    let recentOTPsMapString = localStorage.getItem("recentOTPsMap");
     let recentOTPsMap = new Map();
 
-    let recentOTPsList = this.generateOTPsList(recentOTPsMapString, recentOTPsMap);
-
+    let recentOTPsList = this.generateOTPsList(
+      recentOTPsMapString,
+      recentOTPsMap
+    );
 
     this.setState({
       socket: null,
-      mode: 'enter',
+      mode: "enter",
       service: null,
       recentOTPs: recentOTPsList
     });
-
   }
 
   showConnectionError(errorText) {
@@ -202,112 +183,96 @@ class App extends React.Component {
     this.setState({
       dislpayConnectionError: errorText
     });
-
-
   }
-
 
   attachSocketEvents() {
     let socket = this.state.socket;
-    socket.on("biwayConnection", data => {
+    socket.on("biwayConnection", (data) => {
+      console.log("biwayconnection made");
       window.isConnected = true;
       //////console.og("bothParties have connected " + JSON.stringify(data));
-      if (data.mode == 'netflixView') {
+      if (data.mode == "netflixView") {
         //////console.og('setting mode to netflixView');
 
         this.setState({
-          mode: 'view',
-          service: 'netflix',
+          mode: "view",
+          service: "netflix",
           loggedIn: true
         });
-        localStorage.setItem('loggedIn', true);
-        localStorage.setItem('lastUsedOTP', this.state.lastUsedOtp);
-      }
-      else if (data.mode == 'netflixBrowse') {
+        localStorage.setItem("loggedIn", true);
+        localStorage.setItem("lastUsedOTP", this.state.lastUsedOtp);
+      } else if (data.mode == "netflixBrowse") {
         //////console.og('setting mode to netflixBrowse');
-        this.setState({ mode: 'browse' });
-        this.setState({ service: 'netflix' });
-      }
-      else if (data.mode == 'netflixPremier') {
+        this.setState({ mode: "browse" });
+        this.setState({ service: "netflix" });
+      } else if (data.mode == "netflixPremier") {
         //////console.og('setting mode to netflixPremier');
-        this.setState({ mode: 'premier' });
-        this.setState({ service: 'netflix' });
+        this.setState({ mode: "premier" });
+        this.setState({ service: "netflix" });
       }
     });
 
-    socket.on("biwayConnectionEnded", data => {
+    socket.on("biwayConnectionEnded", (data) => {
       this.goToLandingPage();
       window.isConnected = false;
     });
 
-    socket.on("disconnect", data => {
+    socket.on("disconnect", (data) => {
       this.goToLandingPage();
       window.isConnected = false;
-
     });
 
-    socket.on("cantJoin", data => {
+    socket.on("cantJoin", (data) => {
       this.showConnectionError("One phone is already connected.");
 
       //console.log('hello');
     });
 
-    socket.on("noReceivingDesktop", data => {
-      this.showConnectionError("No Desktop with same OTP found. Please recheck OTP and try again.");
+    socket.on("noReceivingDesktop", (data) => {
+      this.showConnectionError(
+        "No Desktop with same OTP found. Please recheck OTP and try again."
+      );
 
       //console.log('hello2');
     });
 
-    socket.on("modeChange", data => {
+    socket.on("modeChange", (data) => {
       ////console.log('modeChange');
       ////console.og(data);
-      if (data.mode == 'netflixView') {
+      if (data.mode == "netflixView") {
         ////console.og('setting mode to netflixView');
-        this.setState({ mode: 'view' });
-        this.setState({ service: 'netflix' });
-      }
-      else if (data.mode == 'netflixBrowse') {
+        this.setState({ mode: "view" });
+        this.setState({ service: "netflix" });
+      } else if (data.mode == "netflixBrowse") {
         ////console.og('setting mode to netflixBrowse');
-        this.setState({ mode: 'browse' });
-        this.setState({ service: 'netflix' });
-      }
-      else if (data.mode == 'netflixPremier') {
+        this.setState({ mode: "browse" });
+        this.setState({ service: "netflix" });
+      } else if (data.mode == "netflixPremier") {
         ////console.og('setting mode to netflixPremier');
-        this.setState({ mode: 'premier' });
-        this.setState({ service: 'netflix' });
+        this.setState({ mode: "premier" });
+        this.setState({ service: "netflix" });
       }
-
     });
 
-    socket.on("viewModeDataSetup", data => {
-      console.log("received view mode data setup");
-      ////console.log(data);
-      let episodeIndex = -1;
-      if (data.episodes.list != null && data.episodes.list.length > 0) {
-        episodeIndex = data.episodes.list.indexOf(data.episodes.selected);
-      }
-      // //console.log('episodeNumber is ');
-      // //console.log(data.episodeNumber);
-      //console.log("selected  " + data.selectedSubtitle);
+    socket.on("SOCKET_VIEW_MODE_DATA", (data) => {
+      console.log("received view mode data setup", { data });
 
       console.log(data.title);
       console.log(data.episodeNumber);
       console.log(data.title);
       this.setState({
-        selectedEpisodeIndex: episodeIndex,
+        selectedEpisodeIndex: data.episodeNumber - 1,
         selectedEpisode: data.episodes.selected,
         selectedAudio: data.selectedAudio,
         selectedSubtitle: data.selectedSubtitle,
-
+        seasonNumber: data.season,
         episodes: data.episodes.list,
-        subtitleTracks: data.subtitleTracks,
-        audioTracks: data.audioTracksList,
+        subtitleTracks: data.subtitleTracks.list,
+        audioTracks: data.audioTracksList.list,
 
         episodeNumber: data.episodeNumber,
         title: data.title,
         episodeTitle: data.episodeTitle
-
-
       });
       /*if (data.episodes.list != null) {
         let index = data.episodes.list.indexOf(data.episodes.selected);
@@ -315,39 +280,32 @@ class App extends React.Component {
           selectedEpisodeIndex: 4
         });
       }*/
-
-
     });
 
-    socket.on("heartBeatFromServer", data => {
+    socket.on("heartBeatFromServer", (data) => {});
 
-    });
-
-    socket.on("playbackSpeed", data => {
+    socket.on("playbackSpeed", (data) => {
       // //console.log("play back speed has changed " + data);
       ////console.log(data);
       if (data !== this.state.playbackSpeed)
         this.setState({
           playbackSpeed: data
         });
-
     });
 
-    socket.on("muteState", data => {
+    socket.on("muteState", (data) => {
       // //console.log("received muteState " + data);
       if (data == true) {
         this.setState({
           volumeLevel: 0
         });
-
       }
       this.setState({
         muteState: data
       });
-
     });
 
-    socket.on("changeSkipElement", data => {
+    socket.on("changeSkipElement", (data) => {
       //console.log("received changeSkipElement");
       //console.log(data);
       this.setState({
@@ -355,31 +313,27 @@ class App extends React.Component {
       });
     });
 
-    socket.on("durationProgressData", data => {
+    socket.on("durationProgressData", (data) => {
       //console.log("durationData incoming");
       //console.log(data);
       if (!this.progressLock) {
         this.setState({
           progress: data.progress,
           duration: data.duration
-
         });
-
-      }
-      else {
+      } else {
         //console.log("locked");
-
       }
     });
 
-    socket.on("paused", data => {
+    socket.on("paused", (data) => {
       ////console.log("received pause" + data);
       this.setState({
         paused: data
       });
     });
 
-    socket.on("volumeLevel", data => {
+    socket.on("volumeLevel", (data) => {
       ////console.log("received volumeLevelChange" + data);
       ////console.log(this.state.volumeLevel);
       //let muteStateValue = false;
@@ -388,14 +342,13 @@ class App extends React.Component {
       //muteStateValue = true;
       if (!this.state.muteState) {
         this.setState({
-          volumeLevel: data,
+          volumeLevel: data
           // muteState: muteStateValue
         });
-
       }
     });
 
-    socket.on("changeURL", data => {
+    socket.on("changeURL", (data) => {
       this.setState({
         browserURL: data
       });
@@ -407,7 +360,6 @@ class App extends React.Component {
     this.setState({
       selectedEpisodeIndex: this.state.selectedEpisodeIndex + 1
     });
-
   }
 
   submitOtp(otpValue) {
@@ -415,14 +367,17 @@ class App extends React.Component {
     ////console.log("this submit OTP " + otpValue);
     this.setState({ lastUsedOtp: otpValue });
     //console.log("this last used otp " + otpValue);
-    //let newSocket = socketIOClient("http://192.168.1.12:8080?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
-    let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
+    let newSocket = socketIOClient(
+      "http://localhost:8080?otp=" + otpValue + "&connectionType=phone",
+      { reconnectionAttempts: 2 }
+    );
+    //let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
 
-    newSocket.on("connect", data => {
+    newSocket.on("connect", (data) => {
       ////console.log("connection has been made");
 
       //let recentOTP = 'OTP-' + Date.now();
-      let recentOTPsMapString = localStorage.getItem('recentOTPsMap');
+      let recentOTPsMapString = localStorage.getItem("recentOTPsMap");
 
       // //console.log(recentOTPsMapString);
       let recentOTPsMap = new Map();
@@ -431,43 +386,39 @@ class App extends React.Component {
       }
 
       recentOTPsMap[otpValue] = Date.now();
-      localStorage.setItem('recentOTPsMap', JSON.stringify(recentOTPsMap));
-
+      localStorage.setItem("recentOTPsMap", JSON.stringify(recentOTPsMap));
 
       //localStorage.setItem('', keyName);
       this.setState({ socket: newSocket }, function () {
         ////console.og("setting");
         this.attachSocketEvents();
-
-        let newHeartBeat = setInterval(this.heartBeatFunction, 3000);
-
-
       });
 
       ////console.og('connection from phone has been made');
     });
 
-    newSocket.on("connect_error", data => {
+    newSocket.on("connect_error", (data) => {
+      console.log({data});
       this.showConnectionError("Oops. Something went wrong. Please try again");
     });
 
-    newSocket.on("connect_failed", data => {
-      this.showConnectionError("Oops. Our server is down. Please try after some time.");
+    newSocket.on("connect_failed", (data) => {
+            console.log({data});
+      this.showConnectionError(
+        "Oops. Our server is down. Please try after some time."
+      );
     });
-
-  };
-
+  }
 
   toggleHelp() {
-    this.setState({ showHelp: (!this.state.showHelp) });
-  };
+    this.setState({ showHelp: !this.state.showHelp });
+  }
 
   forceLoginfunction() {
     //console.log(this.state.socket);
     //console.log(this.state.lastUsedOtp);
     if (this.state.socket != null)
       this.state.socket.emit("forceLogin", this.state.lastUsedOtp);
-
   }
 
   clearAlertFunction() {
@@ -476,7 +427,6 @@ class App extends React.Component {
         dislpayConnectionError: false
       });
     }
-
   }
 
   changeProgress(data) {
@@ -495,9 +445,7 @@ class App extends React.Component {
 
   closeClicked() {
     this.loggedIn = false;
-    localStorage.setItem('loggedIn', false);
-
-
+    localStorage.setItem("loggedIn", false);
   }
 
   render() {
@@ -514,53 +462,72 @@ class App extends React.Component {
     ////console.og(mode);
     ////console.og(service);
 
-
     let recentOTPButtons = "";
     let recentOTPsHeading = "";
 
     if (this.state.recentOTPs.length > 0) {
-      recentOTPsHeading = "Reconnect with"
-      recentOTPButtons = this.state.recentOTPs.map((x) => <span className="recentOTPButton" onClick={() => this.submitOtp(x)} >{x}</span>);
+      recentOTPsHeading = "Reconnect with";
+      recentOTPButtons = this.state.recentOTPs.map((x) => (
+        <span className="recentOTPButton" onClick={() => this.submitOtp(x)}>
+          {x}
+        </span>
+      ));
     }
-    let recentOTPBox =
-      <div className="recentOTPBox"><span>{recentOTPsHeading}</span>{recentOTPButtons}</div>
+    let recentOTPBox = (
+      <div className="recentOTPBox">
+        <span>{recentOTPsHeading}</span>
+        {recentOTPButtons}
+      </div>
+    );
 
-    let mainBox = <div><OtpBox submitMethod={this.submitOtp}
-      forceLogin={this.forceLoginfunction} clearAlert={this.clearAlertFunction}
-      showConnectionError={this.state.dislpayConnectionError}></OtpBox>
-      {recentOTPBox}
-    </div>;
+    let mainBox = (
+      <div>
+        <OtpBox
+          submitMethod={this.submitOtp}
+          forceLogin={this.forceLoginfunction}
+          clearAlert={this.clearAlertFunction}
+          showConnectionError={this.state.dislpayConnectionError}
+        ></OtpBox>
+        {recentOTPBox}
+      </div>
+    );
 
-
-    if (mode == 'view' && service == 'netflix') {
-      if (this.state.skipElement == 'next') {
-
-      }
-
-      mainBox = <NetflixWatch socket={this.state.socket}
-        episodesList={this.state.episodes} selectedEpisode={this.state.selectedEpisode} selectedEpisodeIndex={this.state.selectedEpisodeIndex}
-        audioTracks={this.state.audioTracks} selectedAudio={this.state.selectedAudio}
-        subtitleTracks={this.state.subtitleTracks} selectedSubtitle={this.state.selectedSubtitle}
-        title={this.state.title} episodeNumber={this.state.episodeNumber}
-
-        isPaused={this.state.paused} volumeLevel={this.state.volumeLevel}
-        playbackSpeed={this.state.playbackSpeed} muteState={this.state.muteState} skipElement={this.state.skipElement}
-        duration={this.state.duration} progress={this.state.progress}
-        onNextEpisode={this.nextEpisode} passCode={this.state.lastUsedOtp}
-        progressLock={this.progressLock}
-        onChangeProgress={this.changeProgress} onClose={this.closeClicked}
-        onOpenTroubleshoot={this.openTroubleshoot}
-
-      ></NetflixWatch>
-    }
-    else if (mode == 'browse' && service == 'netflix') {
-    }
-    else if (mode == 'premier' && service == 'netflix') {
-      mainBox = <NetflixPremier socket={this.state.socket}></NetflixPremier>
+    if (mode == "view" && service == "netflix") {
+      mainBox = (
+        <NetflixWatch
+          socket={this.state.socket}
+          episodesList={this.state.episodes}
+          selectedEpisode={this.state.selectedEpisode}
+          selectedEpisodeIndex={this.state.selectedEpisodeIndex}
+          audioTracks={this.state.audioTracks}
+          selectedAudio={this.state.selectedAudio}
+          subtitleTracks={this.state.subtitleTracks}
+          selectedSubtitle={this.state.selectedSubtitle}
+          title={this.state.title}
+          episodeNumber={this.state.episodeNumber}
+          isPaused={this.state.paused}
+          volumeLevel={this.state.volumeLevel}
+          playbackSpeed={this.state.playbackSpeed}
+          muteState={this.state.muteState}
+          skipElement={this.state.skipElement}
+          duration={this.state.duration}
+          progress={this.state.progress}
+          onNextEpisode={this.nextEpisode}
+          passCode={this.state.lastUsedOtp}
+          progressLock={this.progressLock}
+          onChangeProgress={this.changeProgress}
+          onClose={this.closeClicked}
+          onOpenTroubleshoot={this.openTroubleshoot}
+          seasonNumber={this.state.seasonNumber}
+        ></NetflixWatch>
+      );
+    } else if (mode == "browse" && service == "netflix") {
+    } else if (mode == "premier" && service == "netflix") {
+      mainBox = <NetflixPremier socket={this.state.socket}></NetflixPremier>;
     }
 
     return (
-      <div class='appBox'>
+      <div class="appBox">
         {mainBox}
         {/*<div class="remoteGuideBox">
           {helpCloseButton}
@@ -572,12 +539,7 @@ class App extends React.Component {
           </img>
 
     </div> */}
-
-
-
       </div>
-
-
     );
   }
 }
