@@ -367,6 +367,9 @@ class App extends React.Component {
     ////console.log("this submit OTP " + otpValue);
     this.setState({ lastUsedOtp: otpValue });
     //console.log("this last used otp " + otpValue);
+    console.log({ env: process.env });
+    console.log(process.env.REACT_APP_SERVER_UR);
+
     let newSocket = socketIOClient(
       process.env.REACT_APP_SERVER_URL +
         "?otp=" +
@@ -374,7 +377,7 @@ class App extends React.Component {
         "&connectionType=phone",
       { reconnectionAttempts: 2 }
     );
-
+    console.log({ newSocket });
     newSocket.on("connect", (data) => {
       ////console.log("connection has been made");
 
