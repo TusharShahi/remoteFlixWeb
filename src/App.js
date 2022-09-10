@@ -368,10 +368,12 @@ class App extends React.Component {
     this.setState({ lastUsedOtp: otpValue });
     //console.log("this last used otp " + otpValue);
     let newSocket = socketIOClient(
-      "http://localhost:8080?otp=" + otpValue + "&connectionType=phone",
+      process.env.REACT_APP_SERVER_URL +
+        "?otp=" +
+        otpValue +
+        "&connectionType=phone",
       { reconnectionAttempts: 2 }
     );
-    //let newSocket = socketIOClient(process.env.REACT_APP_SERVER_URL + "?otp=" + otpValue + "&connectionType=phone", { reconnectionAttempts: 2 });
 
     newSocket.on("connect", (data) => {
       ////console.log("connection has been made");
@@ -398,12 +400,12 @@ class App extends React.Component {
     });
 
     newSocket.on("connect_error", (data) => {
-      console.log({data});
+      console.log({ data });
       this.showConnectionError("Oops. Something went wrong. Please try again");
     });
 
     newSocket.on("connect_failed", (data) => {
-            console.log({data});
+      console.log({ data });
       this.showConnectionError(
         "Oops. Our server is down. Please try after some time."
       );
