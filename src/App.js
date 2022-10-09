@@ -368,18 +368,18 @@ class App extends React.Component {
     this.setState({ lastUsedOtp: otpValue });
     //console.log("this last used otp " + otpValue);
     console.log({ env: process.env });
-    console.log(process.env.REACT_APP_SERVER_UR);
+    console.log(process.env.REACT_APP_SERVER_URL);
 
     let newSocket = socketIOClient(
-      process.env.REACT_APP_SERVER_URL +
-        "?otp=" +
-        otpValue +
-        "&connectionType=phone",
-      { reconnectionAttempts: 2 }
+      //process.env.REACT_APP_SERVER_URL +
+      //"https://www.remoteflixserver.herokuapp.com" +
+      //"https://remoteflixserver.herokuapp.com" +
+      "http://localhost:8080" + "?otp=" + otpValue + "&connectionType=phone",
+      { reconnectionAttempts: 2, transports: ["websocket"] }
     );
     console.log({ newSocket });
     newSocket.on("connect", (data) => {
-      ////console.log("connection has been made");
+      console.log("connection has been made");
 
       //let recentOTP = 'OTP-' + Date.now();
       let recentOTPsMapString = localStorage.getItem("recentOTPsMap");
@@ -496,7 +496,7 @@ class App extends React.Component {
         {recentOTPBox}
       </div>
     );
-
+    console.log({ mode, service });
     if (mode == "view" && service == "netflix") {
       mainBox = (
         <NetflixWatch
